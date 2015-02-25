@@ -1,7 +1,7 @@
-package org.codingpedia.demo.rest.service;
+package com.ellychou.todo.rest.service;
 
-import org.codingpedia.demo.rest.util.CORSResponseFilter;
-import org.codingpedia.demo.rest.util.LoggingResponseFilter;
+import com.ellychou.todo.rest.util.CORSResponseFilter;
+import com.ellychou.todo.rest.util.LoggingResponseFilter;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.spring.scope.RequestContextFilter;
@@ -23,5 +23,7 @@ public class MyDemoApplication extends ResourceConfig {
 		register(JacksonFeature.class);		
 		register(LoggingResponseFilter.class);
 		register(CORSResponseFilter.class);
+
+        register(EventRestService.class);
 	}
 }

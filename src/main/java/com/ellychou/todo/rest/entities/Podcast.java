@@ -1,4 +1,4 @@
-package org.codingpedia.demo.rest.entities;
+package com.ellychou.todo.rest.entities;
 
 import java.io.Serializable;
 import java.util.Date;

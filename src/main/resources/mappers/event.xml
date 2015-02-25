@@ -1,0 +1,80 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ellychou.todo.rest.dao.EventDao">
+    <resultMap id="eventMap" type="Event" >
+        <id column="event_id" property="eventId"  />
+        <result column="title" property="title" />
+        <result column="description" property="description" />
+        <result column="done_time" property="doneTime" />
+        <result column="set_time" property="setTime" />
+    </resultMap>
+
+    <!-- ************** CREATE ************** -->
+    <insert id="createEvent" parameterType="Event" useGeneratedKeys="true">
+        INSERT
+          INTO event
+        SET
+            title = #{title},
+            description = #{description},
+            done_time = #{doneTime},
+            set_time = #{setTime}
+    </insert>
+
+    <!-- ************** READ ************** -->
+    <select id="getEvent" resultMap="eventMap">
+        SELECT
+          event_id,
+          title,
+          description,
+          done_time,
+          set_time
+        FROM
+          event
+    </select>
+
+    <select id="getEventById" parameterType="int" resultMap="eventMap">
+        SELECT
+          event_id,
+          title,
+          description,
+          done_time,
+          set_time
+        FROM
+          event
+        WHERE
+          id = #{value};
+    </select>
+
+    <!-- ************** UPDATE ************** -->
+    <update id="updateEvent" parameterType="Event">
+        UPDATE
+          Event
+        SET
+          id = #{id},
+          <if test = "title != null" >
+            ,title = #{title}
+          </if>
+          <if test = "description != null">
+            ,description = #{description}
+          </if>
+          <if test = "doneTime != null">
+            ,done_time = #{doneTime}
+          </if>
+          <if test = "setTime != null">
+            ,set_time = #{setTime}
+          </if>
+        WHERE
+          id = #{id}
+    </update>
+
+    <!-- ************** DELETE ************** -->
+    <delete id="deleteEventById" parameterType="int">
+        DELETE FROM event WHERE id = #{id}
+    </delete>
+
+    <!-- DELETE all -->
+    <delete id="deleteEvent">
+        TRUNCATE TABLE event
+    </delete>
+</mapper>

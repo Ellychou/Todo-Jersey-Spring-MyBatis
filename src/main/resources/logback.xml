@@ -38,7 +38,7 @@
 		</encoder> 	    
   	</appender>  	
   		
-	<logger name="org.codingpedia" additivity="false">
+	<logger name="com.ellychou" additivity="false">
 	    <level value="DEBUG" />
 		<appender-ref ref="dailyRollingFileAppender"/>
 		<appender-ref ref="minuteRollingFileAppender"/>

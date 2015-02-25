@@ -1,4 +1,4 @@
-package org.codingpedia.demo.rest.service;
+package com.ellychou.todo.rest.service;
 import static com.jayway.restassured.RestAssured.expect;
 import static org.hamcrest.Matchers.equalTo;
 

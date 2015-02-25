@@ -12,7 +12,7 @@
 		http://www.springframework.org/schema/context
 		http://www.springframework.org/schema/context/spring-context.xsd">
  
-	<context:component-scan base-package="org.codingpedia.demo.rest.*" />
+	<context:component-scan base-package="com.ellychou.todo.rest.*" />
     
     <!-- import the dataSource definition -->
     <import resource="data-source.xml"/> 
@@ -30,7 +30,7 @@
 	<!-- =============== MyBATIS beans configuration ================== -->
 	<bean id="podcastDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
 	   <property name="sqlSessionFactory" ref="sqlSessionFactory"/>    
-	   <property name="mapperInterface" value="org.codingpedia.demo.rest.dao.PodcastDao" />
+	   <property name="mapperInterface" value="com.ellychou.todo.rest.dao.PodcastDao" />
 	</bean>
 	
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
@@ -38,7 +38,7 @@
 	    <property name="configLocation" value="classpath:config/mybatisV3.xml"/>
 	</bean>
 	
-    <bean id="podcastRestService" class="org.codingpedia.demo.rest.service.PodcastRestService" >
+    <bean id="podcastRestService" class="com.ellychou.todo.rest.service.PodcastRestService" >
     	<property name="podcastDao" ref="podcastDao"/>
     </bean>
     

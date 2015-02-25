@@ -1,8 +1,8 @@
-package org.codingpedia.demo.rest.dao;
+package com.ellychou.todo.rest.dao;
 
 import java.util.List;
 
-import org.codingpedia.demo.rest.entities.Podcast;
+import com.ellychou.todo.rest.entities.Podcast;
 
 /**
  * 

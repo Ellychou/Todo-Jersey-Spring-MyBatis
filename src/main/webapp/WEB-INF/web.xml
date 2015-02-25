@@ -22,7 +22,7 @@
 		</servlet-class>
 		<init-param>
 			<param-name>javax.ws.rs.Application</param-name>
-			<param-value>org.codingpedia.demo.rest.service.MyDemoApplication</param-value>			
+			<param-value>com.ellychou.todo.rest.service.MyDemoApplication</param-value>
 		</init-param>		
 		<load-on-startup>1</load-on-startup>
 	</servlet>

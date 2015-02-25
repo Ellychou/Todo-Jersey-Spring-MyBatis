@@ -1,4 +1,4 @@
-package org.codingpedia.demo.rest.service.integration;
+package com.ellychou.todo.rest.service.integration;
 
 import java.io.IOException;
 import java.util.List;
@@ -11,10 +11,10 @@ import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.ellychou.todo.rest.entities.Podcast;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.codingpedia.demo.rest.entities.Podcast;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.junit.Assert;

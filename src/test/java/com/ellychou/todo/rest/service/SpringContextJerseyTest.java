@@ -37,7 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package org.codingpedia.demo.rest.service;
+package com.ellychou.todo.rest.service;
 
 import java.net.URI;
 import java.security.AccessController;

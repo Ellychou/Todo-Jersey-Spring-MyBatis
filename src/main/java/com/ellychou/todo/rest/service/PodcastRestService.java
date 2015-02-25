@@ -1,4 +1,4 @@
-package org.codingpedia.demo.rest.service;
+package com.ellychou.todo.rest.service;
 
 import java.util.List;
 
@@ -14,8 +14,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.codingpedia.demo.rest.dao.PodcastDao;
-import org.codingpedia.demo.rest.entities.Podcast;
+import com.ellychou.todo.rest.entities.Podcast;
+import com.ellychou.todo.rest.dao.PodcastDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;

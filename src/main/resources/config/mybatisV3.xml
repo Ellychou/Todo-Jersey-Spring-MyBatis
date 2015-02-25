@@ -5,9 +5,16 @@
  
 <configuration>
     <typeAliases>
-        <typeAlias type="org.codingpedia.demo.rest.entities.Podcast" alias="Podcast"/>
+        <typeAlias type="com.ellychou.todo.rest.entities.Podcast" alias="Podcast"/>
     </typeAliases>
     <mappers>
         <mapper resource="mappers/podcast.xml" />
+    </mappers>
+
+    <typeAliases>
+        <typeAlias type="com.ellychou.todo.rest.entities.Event" alias="Event" />
+    </typeAliases>
+    <mappers>
+        <mapper resource="mappers/event.xml" />
     </mappers>
 </configuration>
