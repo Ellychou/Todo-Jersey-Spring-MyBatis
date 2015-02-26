@@ -1,18 +1,17 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-	xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:tx="http://www.springframework.org/schema/tx"	
-	xsi:schemaLocation="
-		http://www.springframework.org/schema/beans	
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx" xmlns:mybatis="http://mybatis.org/schema/mybatis-spring"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
 		http://www.springframework.org/schema/beans/spring-beans.xsd
-	 
-		http://www.springframework.org/schema/tx 
+
+		http://www.springframework.org/schema/tx
 		http://www.springframework.org/schema/tx/spring-tx.xsd
-		 
+
 		http://www.springframework.org/schema/context
-		http://www.springframework.org/schema/context/spring-context.xsd">
+		http://www.springframework.org/schema/context/spring-context.xsd http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring.xsd">
  
-	<context:component-scan base-package="com.ellychou.todo.rest.*" />
+	<context:component-scan base-package="com.ellychou.todo.rest.service" />
  
 	<!--
 		Instruct Spring to perform declarative transaction management
@@ -25,24 +24,12 @@
     </bean>  
     	
 	<!-- =============== MyBATIS beans configuration ================== -->
-	<bean id="podcastDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
-	   <property name="sqlSessionFactory" ref="sqlSessionFactory"/>    
-	   <property name="mapperInterface" value="com.ellychou.todo.rest.dao.PodcastDao" />
-	</bean>
-
-    <bean id="EventDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
-        <property name="sqlSessionFactory" ref="sqlSessionFactory"/>
-        <property name="mapperInterface" value="com.ellychou.todo.rest.dao.EventDao" />
-    </bean>
+    <mybatis:scan base-package="com.ellychou.todo.rest.dao" />
 
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 	    <property name="dataSource" ref="dataSource" />
 	    <property name="configLocation" value="classpath:config/mybatisV3.xml"/>
 	</bean>
-	
-    <bean id="podcastRestService" class="com.ellychou.todo.rest.service.PodcastRestService" >
-    	<property name="podcastDao" ref="podcastDao"/>
-    </bean>
 
 	<bean name="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />

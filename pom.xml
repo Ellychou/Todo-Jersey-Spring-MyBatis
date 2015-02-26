@@ -9,9 +9,9 @@
 	<description>Example of building REST web services with spring, jersey and mybatis on a tomcat server</description>
 
 	<properties>
-		<spring.version>3.2.6.RELEASE</spring.version>
-		<jetty.version>9.0.7.v20131107</jetty.version> <!-- Adapt this to a version found on http://repo.maven.apache.org/maven2/org/eclipse/jetty/jetty-maven-plugin/ -->
+		<spring.version>4.1.5.RELEASE</spring.version>
 		<logback.version>1.1.1</logback.version>
+        <jetty.version>7.6.3.v20120416</jetty.version>
  		<jcloverslf4j.version>1.7.6</jcloverslf4j.version>		
 	</properties>
 
@@ -29,20 +29,6 @@
 			<groupId>org.glassfish.jersey.ext</groupId>
 			<artifactId>jersey-spring3</artifactId>
 			<version>2.4.1</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.springframework</groupId>
-					<artifactId>spring-core</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.springframework</groupId>
-					<artifactId>spring-web</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.springframework</groupId>
-					<artifactId>spring-beans</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.glassfish.jersey.media</groupId>
@@ -61,19 +47,19 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
 			<version>${spring.version}</version>
-			<exclusions>
- 			   <exclusion>
- 			      <groupId>commons-logging</groupId>
- 			      <artifactId>commons-logging</artifactId>
- 			   </exclusion>
- 			</exclusions>				
 		</dependency>
 
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-web</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
 
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -104,14 +90,6 @@
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>5.1.27</version>
-			<scope>provided</scope>
-		</dependency>
-
-		<!-- tomcat jdbc -->
-		<dependency>
-			<groupId>org.apache.tomcat</groupId>
-			<artifactId>tomcat-jdbc</artifactId>
-			<version>7.0.35</version>
 			<scope>provided</scope>
 		</dependency>
 
@@ -175,77 +153,19 @@
 			<groupId>org.slf4j</groupId>                
 			<artifactId>jcl-over-slf4j</artifactId>     
 			<version>${jcloverslf4j.version}</version>  
-		</dependency>		
-	</dependencies>
+		</dependency>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-failsafe-plugin</artifactId>
-				<version>2.16</version>
-				<executions>
-					<execution>
-						<id>integration-test</id>
-						<goals>
-							<goal>integration-test</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>verify</id>
-						<goals>
-							<goal>verify</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.eclipse.jetty</groupId>
-				<artifactId>jetty-maven-plugin</artifactId>
-				<version>${jetty.version}</version>
-				<configuration>
-					<jettyConfig>${project.basedir}/src/main/resources/config/jetty9.xml</jettyConfig>
-					<stopKey>STOP</stopKey>
-					<stopPort>9999</stopPort>
-					<stopWait>5</stopWait>
-					<scanIntervalSeconds>5</scanIntervalSeconds>
-					<scanTargets>
-						<scanTarget>${project.basedir}/src/main</scanTarget>
-						<scanTarget>${project.basedir}/src/test</scanTarget>
-					</scanTargets>
-					<contextXml>${project.basedir}/src/test/resources/jetty-context.xml</contextXml>
-					<webAppConfig>
-						<contextPath>/${project.artifactId}-${project.version}</contextPath>
-					</webAppConfig>
-				</configuration>
-				<dependencies>
-					<dependency>
-						<groupId>mysql</groupId>
-						<artifactId>mysql-connector-java</artifactId>
-						<version>5.1.27</version>
-					</dependency>
-				</dependencies>
-				<executions>
-					<execution>
-						<id>start-jetty</id>
-						<phase>pre-integration-test</phase>
-						<goals>
-							<goal>run-exploded</goal>
-						</goals>
-						<configuration>
-							<scanIntervalSeconds>0</scanIntervalSeconds>
-							<daemon>true</daemon>
-						</configuration>
-					</execution>
-					<execution>
-						<id>stop-jetty</id>
-						<phase>post-integration-test</phase>
-						<goals>
-							<goal>stop</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.17</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.jetty.aggregate</groupId>
+            <artifactId>jetty-all-server</artifactId>
+            <version>${jetty.version}</version>
+            <scope>provided</scope>
+        </dependency>
+	</dependencies>
 </project>  
