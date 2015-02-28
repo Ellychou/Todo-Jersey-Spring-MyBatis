@@ -2,7 +2,6 @@ package com.ellychou.todo.rest.entities;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
-import java.text.DateFormat;
 import java.util.Date;
 
 /**
@@ -13,7 +12,7 @@ import java.util.Date;
 public class Event implements Serializable {
     private static final long serialVersionUID = -8039686696076337057L;
 
-    private int eventId;
+    private Long eventId;
 
     private String title;
 
@@ -25,18 +24,18 @@ public class Event implements Serializable {
 
     public Event(){}
 
-    public Event(String title, String description, Date doneTime, Date setTime) {
+    public Event(String title, String description, Date doneTime) {
         this.title = title;
         this.description = description;
         this.doneTime = doneTime;
-        this.setTime = setTime;
+
     }
 
-    public int getEventId() {
+    public Long getEventId() {
         return eventId;
     }
 
-    public void setEventId(int eventId) {
+    public void setEventId(Long eventId) {
         this.eventId = eventId;
     }
 

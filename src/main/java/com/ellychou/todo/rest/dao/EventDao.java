@@ -10,13 +10,13 @@ import java.util.List;
 public interface EventDao {
     public List<Event> getEvent();
 
-    public Event getEventById(int id);
+    public Event getEventById(Long id);
 
-    public void deleteEventById(int id);
+    public int deleteEventById(Long id);
 
     public int createEvent(Event event);
 
-    public void updateEvent(Event event);
+    public int updateEvent(Event event);
 
     public void deleteEvent();
 

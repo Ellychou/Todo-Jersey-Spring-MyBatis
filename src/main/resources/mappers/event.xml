@@ -33,7 +33,7 @@
           event
     </select>
 
-    <select id="getEventById" parameterType="int" resultMap="eventMap">
+    <select id="getEventById" resultMap="eventMap" parameterType="Long">
         SELECT
           event_id,
           title,
@@ -43,7 +43,7 @@
         FROM
           event
         WHERE
-          id = #{value};
+          event_id = #{value};
     </select>
 
     <!-- ************** UPDATE ************** -->
@@ -51,7 +51,7 @@
         UPDATE
           Event
         SET
-          id = #{id},
+          event_id = #{eventId},
           <if test = "title != null" >
             ,title = #{title}
           </if>
@@ -65,12 +65,12 @@
             ,set_time = #{setTime}
           </if>
         WHERE
-          id = #{id}
+          event_id = #{eventId}
     </update>
 
     <!-- ************** DELETE ************** -->
-    <delete id="deleteEventById" parameterType="int">
-        DELETE FROM event WHERE id = #{id}
+    <delete id="deleteEventById" parameterType= "Long">
+        DELETE FROM event WHERE event_id = #{eventId}
     </delete>
 
     <!-- DELETE all -->

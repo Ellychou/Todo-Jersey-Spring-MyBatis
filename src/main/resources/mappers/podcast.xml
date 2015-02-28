@@ -51,19 +51,7 @@
         	id=#{value};              	            	
     </select>
 
-    <select id="getPodcastByFeed" resultMap="podcastMap" parameterType="String">
-        SELECT
-            id,
-            title,
-            link_on_podcastpedia,            
-            feed,
-            description,
-            insertion_date
-        FROM
-            podcasts
-        WHERE
-        	feed=#{value};              	            	
-    </select>
+
      	
  	<!-- ************** UPDATE ************** -->
  	<update id="updatePodcast" parameterType="Podcast">
