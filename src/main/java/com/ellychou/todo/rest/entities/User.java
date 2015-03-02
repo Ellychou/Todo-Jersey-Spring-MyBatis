@@ -1,5 +1,7 @@
 package com.ellychou.todo.rest.entities;
 
+import com.google.common.base.Objects;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -68,5 +70,27 @@ public class User implements Serializable {
 
     public void setLoginTime(Date loginTime) {
         this.loginTime = loginTime;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(userId, email, userName, password, createdTime, loginTime);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        final User other = (User) obj;
+        return Objects.equal(this.userId, other.userId)
+                && Objects.equal(this.email, other.email)
+                && Objects.equal(this.userName, other.userName)
+                && Objects.equal(this.password, other.password)
+                && Objects.equal(this.createdTime, other.createdTime)
+                && Objects.equal(this.loginTime, other.loginTime);
     }
 }

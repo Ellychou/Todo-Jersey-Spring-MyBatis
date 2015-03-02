@@ -52,18 +52,17 @@
           Event
         SET
           event_id = #{eventId},
-          <if test = "title != null" >
-            ,title = #{title}
-          </if>
-          <if test = "description != null">
-            ,description = #{description}
-          </if>
-          <if test = "doneTime != null">
-            ,done_time = #{doneTime}
-          </if>
-          <if test = "setTime != null">
-            ,set_time = UTC_TIMESTAMP()
-          </if>
+            title = #{title},
+
+
+        description = #{description},
+
+
+        done_time = #{doneTime},
+
+
+        set_time = UTC_TIMESTAMP()
+
         WHERE
           event_id = #{eventId}
     </update>

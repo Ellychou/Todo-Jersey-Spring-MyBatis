@@ -75,9 +75,9 @@ public class EventRestService {
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces({MediaType.TEXT_HTML})
     @Transactional
-    public Response updateEventById(@PathParam("id") Long id, Event event) {
+    public Response updateEventById(@PathParam("id") Long id, Event event) throws WebApplicationException{
         if(event.getEventId() == null) {
-            event.setEventId(id);
+            throw new WebApplicationException("id not found");
         }
         int updated = eventDao.updateEvent(event);
         String message;
