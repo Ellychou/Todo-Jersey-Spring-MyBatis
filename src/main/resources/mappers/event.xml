@@ -18,7 +18,7 @@
             title = #{title},
             description = #{description},
             done_time = #{doneTime},
-            set_time = #{setTime}
+            set_time = UTC_TIMESTAMP()
     </insert>
 
     <!-- ************** READ ************** -->
@@ -62,7 +62,7 @@
             ,done_time = #{doneTime}
           </if>
           <if test = "setTime != null">
-            ,set_time = #{setTime}
+            ,set_time = UTC_TIMESTAMP()
           </if>
         WHERE
           event_id = #{eventId}

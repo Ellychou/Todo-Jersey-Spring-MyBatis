@@ -7,10 +7,13 @@
     <typeAliases>
         <typeAlias type="com.ellychou.todo.rest.entities.Podcast" alias="Podcast"/>
         <typeAlias type="com.ellychou.todo.rest.entities.Event" alias="Event" />
+        <typeAlias type="com.ellychou.todo.rest.entities.User" alias="User" />
+
     </typeAliases>
 
     <mappers>
         <mapper resource="mappers/podcast.xml" />
         <mapper resource="mappers/event.xml" />
+        <mapper resource="mappers/user.xml" />
     </mappers>
 </configuration>

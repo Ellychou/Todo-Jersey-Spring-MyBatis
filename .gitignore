@@ -106,3 +106,5 @@ pom.xml.next
 release.properties
 
 
+
+*.log

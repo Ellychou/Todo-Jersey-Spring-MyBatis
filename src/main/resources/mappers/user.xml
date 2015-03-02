@@ -1,0 +1,50 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ellychou.todo.rest.dao.UserDao">
+    <resultMap id="userMap" type="User">
+        <id column="user_id" property="userId"/>
+        <result column="user_name" property="userName"/>
+        <result column="email" property="email"/>
+        <result column="password" property="password" />
+        <result column="create_time" property="createdTime" />
+        <result column="login_time" property="loginTime" />
+    </resultMap>
+
+    <!-- ************** CREATE ************** -->
+    <insert id="createUser" parameterType="User" useGeneratedKeys="true">
+        INSERT
+          INTO user
+        SET
+            user_name = #{userName},
+            email = #{email},
+            password = #{password},
+            create_time = #{createdTime},
+            login_time = #{loginTime}
+    </insert>
+
+    <!-- ************** READ ************** -->
+    <select id="getUsers" resultMap="userMap">
+        SELECT
+            user_id,
+            user_name,
+            email,
+            password,
+            create_time,
+            login_time
+        FROM user
+    </select>
+
+    <select id="getUserById" resultMap="userMap" parameterType="Long">
+        SELECT
+          user_id,
+          user_name,
+          email,
+          password,
+          create_time,
+          login_time
+        FROM user
+        WHERE user_id = #{id};
+    </select>
+
+</mapper>
