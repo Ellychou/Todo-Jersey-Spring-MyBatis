@@ -47,4 +47,32 @@
         WHERE user_id = #{id};
     </select>
 
+    <select id="getUserByNameOrEmail" resultMap="userMap" parameterType="String">
+        SELECT * FROM user
+        WHERE
+          ${key} = #{value};
+    </select>
+    <!-- ************** UPDATE ************** -->
+    <update id="updateUser" parameterType="User">
+        UPDATE user
+        SET
+            <if test="userId != null"> user_id = #{userId},</if>
+            <if test="userName != null">user_name = #{userName},</if>
+            <if test="email != null">email = #{email},</if>
+            <if test="password != null">password = #{password},</if>
+            <if test="createdTime != null">create_time = #{createdTime},</if>
+           login_time = UTC_TIMESTAMP()
+        WHERE
+            user_id = #{userId}
+    </update>
+
+    <!-- ************** DELETE ************** -->
+    <delete id="deleteUserById" parameterType="Long">
+        DELETE FROM user WHERE user_id = #{userId}
+    </delete>
+
+    <delete id="deleteUsers">
+        TRUNCATE TABLE user
+    </delete>
+
 </mapper>

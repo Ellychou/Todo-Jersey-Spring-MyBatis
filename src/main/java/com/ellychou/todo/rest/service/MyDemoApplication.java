@@ -25,5 +25,6 @@ public class MyDemoApplication extends ResourceConfig {
 		register(CORSResponseFilter.class);
 
         register(EventRestService.class);
+        register(UserRestService.class);
 	}
 }

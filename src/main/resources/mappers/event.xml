@@ -51,20 +51,13 @@
         UPDATE
           Event
         SET
-          event_id = #{eventId},
+            event_id = #{eventId},
             title = #{title},
-
-
-        description = #{description},
-
-
-        done_time = #{doneTime},
-
-
-        set_time = UTC_TIMESTAMP()
-
+            description = #{description},
+            done_time = #{doneTime},
+            set_time = UTC_TIMESTAMP()
         WHERE
-          event_id = #{eventId}
+            event_id = #{eventId}
     </update>
 
     <!-- ************** DELETE ************** -->

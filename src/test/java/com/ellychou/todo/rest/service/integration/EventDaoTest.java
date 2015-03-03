@@ -4,6 +4,7 @@ import com.ellychou.todo.rest.dao.EventDao;
 import com.ellychou.todo.rest.entities.Event;
 import com.ellychou.todo.rest.service.EventRestService;
 import org.apache.log4j.Logger;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -13,11 +14,12 @@ import java.util.Date;
 /**
  * Created by szhou on 2015/2/28.
  */
+@Ignore
 public class EventDaoTest {
     private static final Logger log = Logger.getLogger(EventDaoTest.class);
     private static ApplicationContext context= new ClassPathXmlApplicationContext("spring/applicationContext.xml");
     private EventDao eventDao = context.getBean(EventDao.class);
-    private EventRestService eventService = context.getBean(EventRestService.class);
+
 
     @Test
     public void createEventTest() {

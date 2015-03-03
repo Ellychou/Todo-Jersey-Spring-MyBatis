@@ -100,7 +100,7 @@ public class EventRestService {
     @Produces({MediaType.TEXT_HTML})
     @Transactional
     public Response deleteEventById(@PathParam("id") Long id) {
-       int deleted = eventDao.deleteEventById(id);
+        int deleted = eventDao.deleteEventById(id);
         if (deleted == 1) {
             return Response.status(204).entity("Event with the id" + id + "has been deleted").build();
         } else {
