@@ -17,6 +17,7 @@ public class User implements Serializable {
     private String password;
     private Date createdTime;
     private Date loginTime;
+    private String salt;
 
     public User(String email, String userName, String password) {
         this.email = email;
@@ -86,6 +87,14 @@ public class User implements Serializable {
 
     public void setLoginTime(Date loginTime) {
         this.loginTime = loginTime;
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
     }
 
     @Override

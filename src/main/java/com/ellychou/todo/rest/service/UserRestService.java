@@ -2,14 +2,17 @@ package com.ellychou.todo.rest.service;
 
 import com.ellychou.todo.rest.dao.UserDao;
 import com.ellychou.todo.rest.entities.User;
+import com.ellychou.todo.rest.util.EncryptionKit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.jws.soap.SOAPBinding;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by szhou on 2015/3/2.
@@ -25,21 +28,24 @@ public class UserRestService {
     * @param event
     * @return
     */
-    @POST
+    @POST @Path("/signup")
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.TEXT_HTML})
     @Transactional
     public Response createUser(User user) {
+        String password = user.getPassword();
+        resetPassword(user,password);
         userDao.createUser(user);
         return Response.status(201).entity("User has been created").build();
     }
 
-    @POST @Path("/signup")
+    @POST
     @Consumes({MediaType.APPLICATION_FORM_URLENCODED})
     @Produces({MediaType.TEXT_HTML})
     @Transactional
     public Response signUp(@FormParam("email") String email, @FormParam("userName") String userName, @FormParam("password") String password){
         User user = new User(email,userName,password);
+        resetPassword(user,password);
         userDao.createUser(user);
         return Response.status(201).entity("New user has been created").build();
     }
@@ -50,18 +56,19 @@ public class UserRestService {
         return userDao.getUsers();
     }
 
-    @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    public User getUserByName(String name){
-        User user = userDao.getUserByNameOrEmail("user_name",name);
-        return user;
-    }
-
-    @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    public User getUserByEmail(String email){
-        User user = userDao.getUserByNameOrEmail("email",email);
-        return user;
+    @POST @Path("/login")
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.TEXT_HTML})
+    @Transactional
+    public Response login(User user) {
+        String email = user.getEmail();
+        String password = user.getPassword();
+        User userGot = getUserByEmail(email);
+        if (checkPassword(userGot,password)) {
+            return Response.status(201).entity(userGot).build();
+        }else {
+            return Response.status(404).entity("User not found").build();
+        }
     }
 
     @GET @Path("{id}")
@@ -91,6 +98,24 @@ public class UserRestService {
         }
     }
 
+    @PUT @Path("updatePassword")
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.TEXT_HTML})
+    @Transactional
+    public Response updatePassword(User user) {
+        String email = user.getEmail();
+        String password = user.getPassword();
+        User userGot = getUserByEmail(email);
+        if (userGot != null) {
+            resetPassword(userGot,password);
+            return Response.status(200).entity("Update password successfully").build();
+        }else{
+            return Response.status(404).entity("This user can not be updated").build();
+        }
+
+
+    }
+
     @DELETE @Path("id")
     @Produces({MediaType.TEXT_HTML})
     @Transactional
@@ -103,7 +128,22 @@ public class UserRestService {
         }
     }
 
+    public User getUserByEmail(String email){
+        User user = userDao.getUserByNameOrEmail("email",email);
+        return user;
+    }
 
+    public boolean checkPassword(User user, String password) {
+        String salt = user.getSalt();
+        String psw = EncryptionKit.md5Encrypt(password+salt);
+        return psw.equals(user.getPassword());
+
+    }
+
+    public void resetPassword (User user, String password) {
+        user.setSalt(EncryptionKit.md5Encrypt(UUID.randomUUID().toString()));
+        user.setPassword(EncryptionKit.md5Encrypt(password + user.getSalt()));
+    }
 
 
 
