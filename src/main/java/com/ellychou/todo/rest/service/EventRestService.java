@@ -24,16 +24,18 @@ public class EventRestService {
     @Autowired
     public EventDao eventDao;
 
+    /************************************ CREATE ************************************/
     /**
      * Create new event
      * @param event
      * @return
      */
-    @POST
+    @POST @Path("{userId}")
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.TEXT_HTML})
     @Transactional
-    public Response createEvent(Event event) {
+    public Response createEvent(Event event, @PathParam("userId") Long userId) {
+        event.setUserId(userId);
         eventDao.createEvent(event);
         return Response.status(201).entity("A new event has been created").build();
     }
@@ -53,15 +55,18 @@ public class EventRestService {
         return Response.status(201).entity("A new event has been created").build();
     }
 
-    @GET
+    /************************************ READ ************************************/
+
+    @GET @Path("{userId}")
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    public List<Event> getEventList() {
-        return eventDao.getEvent();
+    public List<Event> getEventList(@PathParam("userId") Long userId) {
+        return eventDao.getEventListByUserId(userId);
     }
 
-    @GET @Path("{id}")
+
+    @GET @Path("one/{eventId}")
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    public Response getEventById(@PathParam("id") Long id) {
+    public Response getEventById(@PathParam("eventId") Long id) {
         Event event = eventDao.getEventById(id);
         if(event == null) {
             return Response.status(404).entity("Event not found").build();
@@ -71,21 +76,43 @@ public class EventRestService {
         }
     }
 
-    @PUT @Path("{id}")
+    @GET @Path("/completed/{userId}")
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    public List<Event> getCompletedList(@PathParam("userId") Long userId) {
+        return eventDao.getCompleteList(userId);
+    }
+
+    @GET @Path("/uncompleted/{userId}")
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    public List<Event> getUnCompletedList(@PathParam("userId") Long userId) {
+        return eventDao.getUncompletedList(userId);
+    }
+
+    @GET @Path("/notified/{userId}")
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    public List<Event> getNotifiedList(@PathParam("userId") Long userId) {
+        return eventDao.getNotifiedList(userId);
+    }
+
+
+    /************************************ UPDATE ************************************/
+
+    @PUT
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces({MediaType.TEXT_HTML})
     @Transactional
-    public Response updateEventById(@PathParam("id") Long id, Event event) throws WebApplicationException{
+    public Response updateEventById(Event event) throws WebApplicationException{
+        Long userId = event.getUserId();
         if(event.getEventId() == null) {
             throw new WebApplicationException("id not found");
         }
-        int updated = eventDao.updateEvent(event);
+        int updated = eventDao.updateEvent(event,userId);
         String message;
         int status;
         if (updated == 1) {
             status = 200;
             message = "Updated Event Successfully";
-        }else if(event.getDescription()!= null && event.getDoneTime() != null && event.getDoneTime() != null) {
+        }else if(event.getDescription()!= null && event.getDoneTime() != null && event.getstartTime() != null) {
             eventDao.createEvent(event);
             status = 201;
             message = "Event has been created";
@@ -96,11 +123,13 @@ public class EventRestService {
         return Response.status(status).entity(message).build();
     }
 
+    /************************************ DELETE ************************************/
+
     @DELETE @Path("{id}")
     @Produces({MediaType.TEXT_HTML})
     @Transactional
     public Response deleteEventById(@PathParam("id") Long id) {
-        int deleted = eventDao.deleteEventById(id);
+        int deleted = eventDao.deleteEventByEventId(id);
         if (deleted == 1) {
             return Response.status(204).entity("Event with the id" + id + "has been deleted").build();
         } else {

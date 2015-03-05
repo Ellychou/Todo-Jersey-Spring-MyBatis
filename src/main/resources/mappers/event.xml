@@ -7,7 +7,10 @@
         <result column="title" property="title" />
         <result column="description" property="description" />
         <result column="done_time" property="doneTime" />
-        <result column="set_time" property="setTime" />
+        <result column="start_time" property="startTime" />
+        <result column="user_id" property = "userId" />
+        <result column="is_done" property="isDone" />
+        <result column="is_notify" property="isNotified" />
     </resultMap>
 
     <!-- ************** CREATE ************** -->
@@ -18,53 +21,84 @@
             title = #{title},
             description = #{description},
             done_time = #{doneTime},
-            set_time = UTC_TIMESTAMP()
+            start_time = #{startTime},
+            user_id = #{userId},
+            is_done = 0,
+            is_notify = 0
     </insert>
 
     <!-- ************** READ ************** -->
-    <select id="getEvent" resultMap="eventMap">
-        SELECT
-          event_id,
-          title,
-          description,
-          done_time,
-          set_time
-        FROM
-          event
+    <select id="getEventListByUserId" resultMap="eventMap" parameterType="Long">
+        SELECT * FROM event
+        WHERE user_id = #{userId}
     </select>
 
     <select id="getEventById" resultMap="eventMap" parameterType="Long">
-        SELECT
-          event_id,
-          title,
-          description,
-          done_time,
-          set_time
+        SELECT *
         FROM
           event
         WHERE
-          event_id = #{value};
+          event_id = #{value}
     </select>
 
+    <select id="getCompleteList" resultMap="eventMap" parameterType="Long">
+        SELECT * FROM event
+        WHERE user_id = #{userId}
+        AND is_done = 1
+    </select>
+
+    <select id="getUncompletedList" resultMap="eventMap" parameterType="Long">
+        SELECT * FROM event
+        WHERE user_id = #{userId}
+        AND is_done = 0
+    </select>
+
+    <select id="getNotifiedList" resultMap="eventMap" parameterType="Long">
+        SELECT * FROM event
+        WHERE user_id = #{userId}
+        AND is_notify = 1
+    </select>
+
+
     <!-- ************** UPDATE ************** -->
-    <update id="updateEvent" parameterType="Event">
+    <update id="updateEvent" parameterType="map">
         UPDATE
-          Event
+          event
         SET
-            event_id = #{eventId},
-            title = #{title},
-            description = #{description},
-            done_time = #{doneTime},
-            set_time = UTC_TIMESTAMP()
+            <if test="event_id != null"> event_id = #{eventId},</if>
+            <if test="title != null"> title = #{title},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="done_time != null">done_time = #{doneTime},</if>
+            <if test="start_time != null">start_time = UTC_TIMESTAMP()</if>
+            <if test="is_done != null"> is_done= #{isDone} </if>
+            <if test="is_notify != null">is_notify = #{is_notify}</if>
         WHERE
             event_id = #{eventId}
+        AND user_id = #{userId}
+    </update>
+
+    <update id="updateEventIsDone" parameterType="map">
+        UPDATE event
+        SET is_done = 1
+        WHERE even_id = #{eventId}
+        AND user_id = #{userId}
+    </update>
+
+    <update id="updateEventIsNotified" parameterType="map">
+        UPDATE event
+        SET is_notify = 1
+        WHERE even_id = #{eventId}
+        AND user_id = #{userId}
     </update>
 
     <!-- ************** DELETE ************** -->
-    <delete id="deleteEventById" parameterType= "Long">
+    <delete id="deleteEventByEventId" parameterType= "Long">
         DELETE FROM event WHERE event_id = #{eventId}
     </delete>
 
+    <delete id="deleteEventByUserId" parameterType= "Long">
+        DELETE FROM event WHERE user_id = #{userId}
+    </delete>
     <!-- DELETE all -->
     <delete id="deleteEvent">
         TRUNCATE TABLE event

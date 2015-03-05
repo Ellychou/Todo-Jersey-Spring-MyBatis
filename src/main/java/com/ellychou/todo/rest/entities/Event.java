@@ -22,7 +22,13 @@ public class Event implements Serializable {
 
     private Date doneTime;
 
-    private Date setTime;
+    private Date startTime;
+
+    private Long userId;
+
+    private int isDone;
+
+    private int isNotified;
 
     public Event(){}
 
@@ -38,6 +44,15 @@ public class Event implements Serializable {
         this.description = description;
         this.doneTime = doneTime;
 
+    }
+
+    public Event(Long eventId, String title, String description, Date doneTime, Date startTime, Long userId) {
+        this.eventId = eventId;
+        this.title = title;
+        this.description = description;
+        this.doneTime = doneTime;
+        this.startTime = startTime;
+        this.userId = userId;
     }
 
     public Long getEventId() {
@@ -56,12 +71,12 @@ public class Event implements Serializable {
         this.description = description;
     }
 
-    public Date getSetTime() {
-        return setTime;
+    public Date getstartTime() {
+        return startTime;
     }
 
-    public void setSetTime(Date setTime) {
-        this.setTime = setTime;
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
     }
 
     public String getTitle() {
@@ -80,6 +95,30 @@ public class Event implements Serializable {
         this.doneTime = doneTime;
     }
 
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public int getIsNotified() {
+        return isNotified;
+    }
+
+    public void setIsNotified(int isNotified) {
+        this.isNotified = isNotified;
+    }
+
+    public int getIsDone() {
+        return isDone;
+    }
+
+    public void setIsDone(int isDone) {
+        this.isDone = isDone;
+    }
+
     @Override
     public String toString() {
         return "Event{" +
@@ -87,13 +126,13 @@ public class Event implements Serializable {
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", doneTime=" + doneTime +
-                ", setTime=" + setTime +
+                ", setTime=" + startTime +
                 '}';
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(eventId, title, description, doneTime, setTime);
+        return Objects.hashCode(eventId, title, description, doneTime, startTime);
     }
 
     @Override
@@ -109,6 +148,6 @@ public class Event implements Serializable {
                 && Objects.equal(this.title, other.title)
                 && Objects.equal(this.description, other.description)
                 && Objects.equal(this.doneTime, other.doneTime)
-                && Objects.equal(this.setTime, other.setTime);
+                && Objects.equal(this.startTime, other.startTime);
     }
 }

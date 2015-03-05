@@ -42,13 +42,13 @@ public class EventDaoTest {
     @Test
     public void updateTest(){
         Event event = new Event(1L,"test", "finish now", new Date());
-        int i = eventDao.updateEvent(event);
+        int i = eventDao.updateEvent(event,1L);
         log.info(i);
     }
 
     @Test
     public void deleteTest() {
-        eventDao.deleteEventById(3L);
+        eventDao.deleteEventByUserId(3L);
     }
 
 }
