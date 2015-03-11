@@ -3,12 +3,13 @@ package com.ellychou.todo.rest.entities;
 import com.google.common.base.Objects;
 
 import java.io.Serializable;
+import java.security.Principal;
 import java.util.Date;
 
 /**
  * Created by szhou on 2015/2/27.
  */
-public class User implements Serializable {
+public class User implements Serializable, Principal {
     public static final long serialVersionUID = -8039686696076337056L;
 
     private Long userId;
@@ -38,6 +39,11 @@ public class User implements Serializable {
         this.userId = userId;
         this.email = email;
         this.userName = userName;
+        this.password = password;
+    }
+
+    public User(String email, String password) {
+        this.email = email;
         this.password = password;
     }
 
@@ -103,6 +109,11 @@ public class User implements Serializable {
     }
 
     @Override
+    public String getName() {
+        return userId.toString();
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
@@ -117,5 +128,18 @@ public class User implements Serializable {
                 && Objects.equal(this.password, other.password)
                 && Objects.equal(this.createdTime, other.createdTime)
                 && Objects.equal(this.loginTime, other.loginTime);
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "userId=" + userId +
+                ", email='" + email + '\'' +
+                ", userName='" + userName + '\'' +
+                ", password='" + password + '\'' +
+                ", createdTime=" + createdTime +
+                ", loginTime=" + loginTime +
+                ", salt='" + salt + '\'' +
+                '}';
     }
 }

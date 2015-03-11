@@ -1,5 +1,6 @@
 package com.ellychou.todo.rest.service;
 
+import com.ellychou.todo.rest.filter.AuthenticationRequestFilter;
 import com.ellychou.todo.rest.util.CORSResponseFilter;
 import com.ellychou.todo.rest.util.LoggingResponseFilter;
 import org.glassfish.jersey.jackson.JacksonFeature;
@@ -26,5 +27,7 @@ public class MyDemoApplication extends ResourceConfig {
 
         register(EventRestService.class);
         register(UserRestService.class);
+        register(AuthenticationRequestFilter.class);
+
 	}
 }

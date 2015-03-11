@@ -30,10 +30,8 @@ public interface EventDao {
 
     public int updateEvent(@Param("event") Event event, @Param("userId") Long userId);
 
-    public int deleteEventByEventId(Long id);
+    public int deleteEvent(@Param("eventId") Long eventId, @Param("userId") Long userId);
 
-    public int deleteEventByUserId(Long id);
-
-    public void deleteEvent();
+    public int deleteEvents(Long userId);
 
 }

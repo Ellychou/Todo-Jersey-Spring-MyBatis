@@ -92,15 +92,11 @@
     </update>
 
     <!-- ************** DELETE ************** -->
-    <delete id="deleteEventByEventId" parameterType= "Long">
-        DELETE FROM event WHERE event_id = #{eventId}
-    </delete>
-
-    <delete id="deleteEventByUserId" parameterType= "Long">
-        DELETE FROM event WHERE user_id = #{userId}
+    <delete id="deleteEvent" parameterType= "map">
+        DELETE FROM event WHERE user_id = #{userId} AND even_id = #{eventId}
     </delete>
     <!-- DELETE all -->
-    <delete id="deleteEvent">
+    <delete id="deleteEvents">
         TRUNCATE TABLE event
     </delete>
 </mapper>

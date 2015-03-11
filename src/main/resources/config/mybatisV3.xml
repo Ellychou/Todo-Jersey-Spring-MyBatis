@@ -8,6 +8,7 @@
         <typeAlias type="com.ellychou.todo.rest.entities.Podcast" alias="Podcast"/>
         <typeAlias type="com.ellychou.todo.rest.entities.Event" alias="Event" />
         <typeAlias type="com.ellychou.todo.rest.entities.User" alias="User" />
+        <typeAlias type="com.ellychou.todo.rest.entities.Token" alias="Token" />
 
     </typeAliases>
 
@@ -15,5 +16,7 @@
         <mapper resource="mappers/podcast.xml" />
         <mapper resource="mappers/event.xml" />
         <mapper resource="mappers/user.xml" />
+        <mapper resource="mappers/token.xml" />
+
     </mappers>
 </configuration>

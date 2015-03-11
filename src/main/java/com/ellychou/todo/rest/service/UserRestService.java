@@ -23,6 +23,9 @@ public class UserRestService {
 
     @Autowired
     public UserDao userDao;
+
+    @Autowired
+    public TokenService tokenService;
     /*
     * Create new event
     * @param event
@@ -36,7 +39,8 @@ public class UserRestService {
         String password = user.getPassword();
         resetPassword(user,password);
         userDao.createUser(user);
-        return Response.status(201).entity("User has been created").build();
+        String token = tokenService.createToken(user);
+        return Response.status(201).entity(token).build();
     }
 
     @POST
@@ -47,7 +51,8 @@ public class UserRestService {
         User user = new User(email,userName,password);
         resetPassword(user,password);
         userDao.createUser(user);
-        return Response.status(201).entity("New user has been created").build();
+        String token = tokenService.createToken(user);
+        return Response.status(201).entity("New user has been created" + token).build();
     }
 
     @GET
@@ -58,14 +63,15 @@ public class UserRestService {
 
     @POST @Path("/login")
     @Consumes({MediaType.APPLICATION_JSON})
-    @Produces({MediaType.TEXT_HTML})
+    @Produces({MediaType.APPLICATION_JSON})
     @Transactional
     public Response login(User user) {
         String email = user.getEmail();
         String password = user.getPassword();
         User userGot = getUserByEmail(email);
         if (checkPassword(userGot,password)) {
-            return Response.status(201).entity(userGot).build();
+            String token = tokenService.createToken(userGot);
+            return Response.status(201).entity(token).build();
         }else {
             return Response.status(404).entity("User not found").build();
         }

@@ -39,10 +39,11 @@ public class Event implements Serializable {
         this.doneTime = doneTime;
     }
 
-    public Event(String title, String description, Date doneTime) {
+    public Event(String title, String description, Date doneTime, Long userId) {
         this.title = title;
         this.description = description;
         this.doneTime = doneTime;
+        this.userId = userId;
 
     }
 

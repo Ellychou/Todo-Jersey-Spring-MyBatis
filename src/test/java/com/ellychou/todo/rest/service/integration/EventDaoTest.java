@@ -28,7 +28,7 @@ public class EventDaoTest {
         String dateInString = "22-01-2015 10:20:56";
         Date date = sdf.parse(dateInString);
         */
-        Event event = new Event("Test service","Finish by tomorrow",new Date());
+        Event event = new Event("Test service","Finish by tomorrow",new Date(),1L);
         int i = eventDao.createEvent(event);
         log.info(event.toString() + i);
     }
@@ -48,7 +48,7 @@ public class EventDaoTest {
 
     @Test
     public void deleteTest() {
-        eventDao.deleteEventByUserId(3L);
+        eventDao.deleteEvents(3L);
     }
 
 }

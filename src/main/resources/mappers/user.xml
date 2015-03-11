@@ -9,6 +9,7 @@
         <result column="password" property="password" />
         <result column="create_time" property="createdTime" />
         <result column="login_time" property="loginTime" />
+        <result column="salt" property="salt" />
     </resultMap>
 
     <!-- ************** CREATE ************** -->
@@ -19,8 +20,9 @@
             user_name = #{userName},
             email = #{email},
             password = #{password},
-            create_time = #{createdTime},
-            login_time = #{loginTime}
+            create_time = UTC_TIMESTAMP(),
+            login_time = UTC_TIMESTAMP(),
+            salt = #{salt}
     </insert>
 
     <!-- ************** READ ************** -->
@@ -31,7 +33,9 @@
             email,
             password,
             create_time,
-            login_time
+            login_time,
+            salt
+
         FROM user
     </select>
 
@@ -42,7 +46,8 @@
           email,
           password,
           create_time,
-          login_time
+          login_time,
+          salt
         FROM user
         WHERE user_id = #{id};
     </select>
@@ -61,6 +66,7 @@
             <if test="email != null">email = #{email},</if>
             <if test="password != null">password = #{password},</if>
             <if test="createdTime != null">create_time = #{createdTime},</if>
+            <if test="salt != null">salt = #{salt},</if>
            login_time = UTC_TIMESTAMP()
         WHERE
             user_id = #{userId}

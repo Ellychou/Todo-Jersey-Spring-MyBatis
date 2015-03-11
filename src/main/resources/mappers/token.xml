@@ -1,0 +1,49 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ellychou.todo.rest.dao.TokenDao">
+    <resultMap id="tokenMap" type="Token">
+        <result column="user_id" property="userId"/>
+        <result column="token" property="token"/>
+        <result column="timeStamp" property="timeStamp" />
+        <result column="expire" property="expire" />
+    </resultMap>
+
+    <!-- ************** CREATE ************** -->
+    <insert id="createToken" parameterType="Token">
+        INSERT
+          INTO token
+        SET
+          user_id = #{userId},
+          token = #{token},
+          timeStamp = UTC_TIMESTAMP(),
+          expire = 86400
+    </insert>
+
+    <!-- ************** READ ************** -->
+    <select id="getTokenByUserId" parameterType="Long" resultMap="tokenMap">
+        SELECT * FROM `token`
+        WHERE user_id = #{userId}
+    </select>
+    <select id="getUserIdByToken" parameterType="String" resultType="Long">
+        SELECT user_id FROM `token`
+        WHERE token = #{token}
+    </select>
+
+
+    <!-- ************** UPDATE ************** -->
+    <update id="updateToken" parameterType="Token">
+        UPDATE token
+        SET
+          <if test="user_id != null">user_id = #{userId},</if>
+          <if test="token != null">token = #{token}</if>
+          <if test="timeStamp != null">timeStamp = #{timeStamp} </if>
+          <if test="expire != null">expire = #{expire}</if>
+    </update>
+
+    <!-- ************** DELETE ************** -->
+    <delete id="deleteTokenByUserId" parameterType="Long">
+        DELETE FROM token WHERE user_id = #{userId}
+    </delete>
+
+</mapper>
