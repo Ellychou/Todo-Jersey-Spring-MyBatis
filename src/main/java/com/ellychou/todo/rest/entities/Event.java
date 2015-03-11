@@ -47,6 +47,14 @@ public class Event implements Serializable {
 
     }
 
+    public Event(String title, String description, Date doneTime) {
+        this.title = title;
+        this.description = description;
+        this.doneTime = doneTime;
+
+
+    }
+
     public Event(Long eventId, String title, String description, Date doneTime, Date startTime, Long userId) {
         this.eventId = eventId;
         this.title = title;

@@ -107,4 +107,9 @@ release.properties
 
 
 
+
+
 *.log
+
+src/main/resources/spring/application_jdbc.properties
+src/main/java/com/ellychou/todo/rest/util/Const.java

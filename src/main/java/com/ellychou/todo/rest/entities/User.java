@@ -1,6 +1,7 @@
 package com.ellychou.todo.rest.entities;
 
 import com.google.common.base.Objects;
+import org.apache.log4j.Logger;
 
 import java.io.Serializable;
 import java.security.Principal;
@@ -11,6 +12,7 @@ import java.util.Date;
  */
 public class User implements Serializable, Principal {
     public static final long serialVersionUID = -8039686696076337056L;
+    private static final Logger log = Logger.getLogger(User.class);
 
     private Long userId;
     private String email;
@@ -110,6 +112,7 @@ public class User implements Serializable, Principal {
 
     @Override
     public String getName() {
+        log.info("getname: " + userId);
         return userId.toString();
     }
 

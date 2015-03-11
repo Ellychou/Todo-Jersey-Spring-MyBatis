@@ -3,6 +3,7 @@ package com.ellychou.todo.rest.security;
 import com.ellychou.todo.rest.dao.UserDao;
 import com.ellychou.todo.rest.entities.User;
 import com.ellychou.todo.rest.service.UserRestService;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.ws.rs.core.SecurityContext;
@@ -12,6 +13,8 @@ import java.security.Principal;
  * Created by szhou on 2015/3/9.
  */
 public class AuthenticationSecurityContext implements SecurityContext {
+
+    private static final Logger log = Logger.getLogger(AuthenticationSecurityContext.class);
     private User user;
 
     @Autowired
@@ -27,7 +30,8 @@ public class AuthenticationSecurityContext implements SecurityContext {
 
     @Override
     public Principal getUserPrincipal() {
-        return user;
+        log.info("princeple: " + user);
+        return this.user;
     }
 
     @Override

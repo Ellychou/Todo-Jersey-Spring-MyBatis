@@ -3,6 +3,7 @@ package com.ellychou.todo.rest.service;
 import com.ellychou.todo.rest.dao.EventDao;
 import com.ellychou.todo.rest.entities.Event;
 import com.ellychou.todo.rest.entities.User;
+import org.apache.log4j.Logger;
 import org.jboss.logging.FormatWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -10,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.print.attribute.standard.Media;
 import javax.ws.rs.*;
+import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -23,12 +25,10 @@ import java.util.List;
 @Component
 @Path("/event")
 public class EventRestService {
-
+    private static final Logger log = Logger.getLogger(EventRestService.class);
     @Autowired
     public EventDao eventDao;
 
-    @Context
-    private SecurityContext sc;
 
 
     /************************************ CREATE ************************************/
@@ -42,8 +42,10 @@ public class EventRestService {
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.TEXT_HTML})
     @Transactional
-    public Response createEvent(Event event) {
-        Long userId = ((User) sc.getUserPrincipal()).getUserId();
+    public Response createEvent(@Context SecurityContext sc,Event event) {
+        //Long userId = ((User) sc.getUserPrincipal()).getUserId();
+        Long userId = Long.valueOf(sc.getUserPrincipal().getName());
+        log.info("userid" + userId);
         event.setUserId(userId);
         eventDao.createEvent(event);
         return Response.status(201).entity("A new event has been created").build();
@@ -56,7 +58,7 @@ public class EventRestService {
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces({MediaType.TEXT_HTML})
     @Transactional
-    public Response createEventFromForm(@FormParam("title") String title,
+    public Response createEventFromForm(@Context SecurityContext sc,@FormParam("title") String title,
                                         @FormParam("description") String description,
                                         @FormParam("doneTime") Date doneTime) {
         Long userId = ((User) sc.getUserPrincipal()).getUserId();
@@ -71,7 +73,7 @@ public class EventRestService {
 
     @GET
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public List<Event> getEventList() {
+    public List<Event> getEventList(@Context SecurityContext sc) {
         Long userId = ((User) sc.getUserPrincipal()).getUserId();
         return eventDao.getEventListByUserId(userId);
     }
@@ -80,7 +82,7 @@ public class EventRestService {
     @GET
     @Path("one/{eventId}")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public Response getEventById(@PathParam("eventId") Long id) {
+    public Response getEventById(@Context SecurityContext sc,@PathParam("eventId") Long id) {
         Long userId = ((User) sc.getUserPrincipal()).getUserId();
         Event event = eventDao.getEventById(id);
         if (event == null) {
@@ -96,7 +98,7 @@ public class EventRestService {
     @GET
     @Path("/completed")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public List<Event> getCompletedList() {
+    public List<Event> getCompletedList(@Context SecurityContext sc) {
         Long userId = ((User) sc.getUserPrincipal()).getUserId();
         return eventDao.getCompleteList(userId);
     }
@@ -104,7 +106,7 @@ public class EventRestService {
     @GET
     @Path("/uncompleted")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public List<Event> getUnCompletedList() {
+    public List<Event> getUnCompletedList(@Context SecurityContext sc) {
         Long userId = ((User) sc.getUserPrincipal()).getUserId();
         return eventDao.getUncompletedList(userId);
     }
@@ -112,7 +114,7 @@ public class EventRestService {
     @GET
     @Path("/notified")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public List<Event> getNotifiedList() {
+    public List<Event> getNotifiedList(@Context SecurityContext sc) {
         Long userId = ((User) sc.getUserPrincipal()).getUserId();
         return eventDao.getNotifiedList(userId);
     }
@@ -126,7 +128,7 @@ public class EventRestService {
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces({MediaType.TEXT_HTML})
     @Transactional
-    public Response updateEventById(Event event) throws WebApplicationException {
+    public Response updateEventById(@Context SecurityContext sc,Event event) throws WebApplicationException {
         Long userId = ((User) sc.getUserPrincipal()).getUserId();
         if (event.getEventId() == null) {
             throw new WebApplicationException("id not found");
@@ -152,7 +154,7 @@ public class EventRestService {
     @Path("{id}")
     @Produces({MediaType.TEXT_HTML})
     @Transactional
-    public Response deleteEventById(@PathParam("id") Long id) {
+    public Response deleteEventById(@Context SecurityContext sc,@PathParam("id") Long id) {
         Long userId = ((User) sc.getUserPrincipal()).getUserId();
         int deleted = eventDao.deleteEvent(id, userId);
         if (deleted == 1) {
@@ -165,7 +167,7 @@ public class EventRestService {
     @DELETE
     @Produces({MediaType.TEXT_HTML})
     @Transactional
-    public Response deleteEvent() {
+    public Response deleteEvent(@Context SecurityContext sc) {
         Long userId = ((User) sc.getUserPrincipal()).getUserId();
         int deleted = eventDao.deleteEvents(userId);
 
