@@ -13,9 +13,11 @@ import java.util.Properties;
  */
 public class SendMailKit {
 
-        public static void send(String fromEmail, String fromName, String toEmail, String subject, String content) {
+        public static void send(String toEmail, String subject, String content) {
             final String username = Const.MAILGUN_USERNAME;
             final String password = Const.MAILGUN_PASSWORD;
+            final String fromEmail = "TodoNotify@ellychou.com";
+            final String fromName = "todo";
 
             Properties props = new Properties();
             props.put("mail.smtp.auth", "true");

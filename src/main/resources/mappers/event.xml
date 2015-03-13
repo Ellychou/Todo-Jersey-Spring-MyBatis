@@ -59,6 +59,14 @@
         AND is_notify = 1
     </select>
 
+    <select id="getUnNotifiedList" resultMap="eventMap">
+        SELECT * FROM event
+        WHERE is_done = 0
+        AND is_notify = 0
+        AND (HOUR(TIMEDIFF(NOW(),done_time)) > 1)
+
+    </select>
+
 
     <!-- ************** UPDATE ************** -->
     <update id="updateEvent" parameterType="map">
@@ -80,20 +88,20 @@
     <update id="updateEventIsDone" parameterType="map">
         UPDATE event
         SET is_done = 1
-        WHERE even_id = #{eventId}
+        WHERE event_id = #{eventId}
         AND user_id = #{userId}
     </update>
 
-    <update id="updateEventIsNotified" parameterType="map">
+    <update id="updateEventIsNotified" parameterType="Long">
         UPDATE event
         SET is_notify = 1
-        WHERE even_id = #{eventId}
-        AND user_id = #{userId}
+        WHERE event_id = #{eventId}
+
     </update>
 
     <!-- ************** DELETE ************** -->
     <delete id="deleteEvent" parameterType= "map">
-        DELETE FROM event WHERE user_id = #{userId} AND even_id = #{eventId}
+        DELETE FROM event WHERE user_id = #{userId} AND event_id = #{eventId}
     </delete>
     <!-- DELETE all -->
     <delete id="deleteEvents">

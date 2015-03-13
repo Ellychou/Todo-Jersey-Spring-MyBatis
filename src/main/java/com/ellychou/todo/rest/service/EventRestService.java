@@ -26,6 +26,7 @@ import java.util.List;
 @Path("/event")
 public class EventRestService {
     private static final Logger log = Logger.getLogger(EventRestService.class);
+
     @Autowired
     public EventDao eventDao;
 

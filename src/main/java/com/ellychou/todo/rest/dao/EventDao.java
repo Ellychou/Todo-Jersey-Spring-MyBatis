@@ -17,6 +17,8 @@ public interface EventDao {
 
     public List<Event> getUncompletedList(Long userId);
 
+    public List<Event> getUnNotifiedList();
+
     public List<Event> getNotifiedList(Long userId);
 
 
@@ -26,7 +28,7 @@ public interface EventDao {
 
     public int updateEventIsDone(@Param("eventId") Long eventId, @Param("userId") Long userId);
 
-    public int updateEventIsNotified(@Param("eventId") Long eventId, @Param("userId") Long userId);
+    public int updateEventIsNotified(Long eventId);
 
     public int updateEvent(@Param("event") Event event, @Param("userId") Long userId);
 
