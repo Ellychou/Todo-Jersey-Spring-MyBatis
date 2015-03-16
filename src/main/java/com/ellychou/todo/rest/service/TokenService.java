@@ -23,7 +23,10 @@ public class TokenService {
     public UserDao userDao;
 
     public String createToken(User user) {
-        Token token = new Token(user.getUserId());
+        Long userId = user.getUserId();
+        log.info("use when create token : " + user);
+        Token token = new Token();
+        token.setUserId(userId);
         token.setToken(UUID.randomUUID().toString());
         tokenDao.createToken(token);
         return token.getToken();

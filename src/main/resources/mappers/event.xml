@@ -63,7 +63,7 @@
         SELECT * FROM event
         WHERE is_done = 0
         AND is_notify = 0
-        AND (HOUR(TIMEDIFF(NOW(),done_time)) > 1)
+        AND (HOUR(TIMEDIFF(NOW(),done_time)) &lt; 1)
 
     </select>
 

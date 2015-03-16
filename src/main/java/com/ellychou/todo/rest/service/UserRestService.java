@@ -1,16 +1,20 @@
 package com.ellychou.todo.rest.service;
 
+import com.ellychou.todo.rest.dao.TokenDao;
 import com.ellychou.todo.rest.dao.UserDao;
 import com.ellychou.todo.rest.entities.User;
 import com.ellychou.todo.rest.util.EncryptionKit;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.jws.soap.SOAPBinding;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,9 +24,13 @@ import java.util.UUID;
 @Component
 @Path("/user")
 public class UserRestService {
+    private static final Logger log = Logger.getLogger(UserRestService.class);
 
     @Autowired
     public UserDao userDao;
+
+    @Autowired
+    public TokenDao tokenDao;
 
     @Autowired
     public TokenService tokenService;
@@ -39,6 +47,8 @@ public class UserRestService {
         String password = user.getPassword();
         resetPassword(user,password);
         userDao.createUser(user);
+        log.info("userService create user " + user);
+
         String token = tokenService.createToken(user);
         return Response.status(201).entity(token).build();
     }
@@ -76,6 +86,23 @@ public class UserRestService {
             return Response.status(404).entity("User not found").build();
         }
     }
+
+    @POST @Path("logout")
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    public Response logout(@Context SecurityContext sc) {
+        Long userId = Long.valueOf(sc.getUserPrincipal().getName());
+        int i = tokenDao.deleteTokenByUserId(userId);
+        if(i == 1) {
+            return Response.status(200).entity("Deleted the user successfully").build();
+        }else{
+            return Response.status(404).entity("This user can not be deleted").build();
+        }
+
+
+    }
+
+
 
     @GET @Path("{id}")
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
