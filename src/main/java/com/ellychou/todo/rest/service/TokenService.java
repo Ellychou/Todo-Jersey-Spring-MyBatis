@@ -26,7 +26,7 @@ public class TokenService {
         Long userId = user.getUserId();
         log.info("use when create token : " + user);
         Token token = new Token();
-        token.setUserId(userId);
+        token.setUserId(17L);
         token.setToken(UUID.randomUUID().toString());
         tokenDao.createToken(token);
         return token.getToken();

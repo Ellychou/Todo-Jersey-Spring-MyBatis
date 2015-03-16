@@ -39,17 +39,25 @@ public class EventRestService {
      * @param event
      * @return
      */
-    @POST
+    @POST @Path("/createNewEvent")
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.TEXT_HTML})
     @Transactional
     public Response createEvent(@Context SecurityContext sc,Event event) {
         //Long userId = ((User) sc.getUserPrincipal()).getUserId();
         Long userId = Long.valueOf(sc.getUserPrincipal().getName());
-        log.info("userid" + userId);
-        event.setUserId(userId);
-        eventDao.createEvent(event);
-        return Response.status(201).entity("A new event has been created").build();
+        if (userId != null) {
+            log.info("userid" + userId);
+            event.setUserId(userId);
+            int i = eventDao.createEvent(event);
+            if(i == 1) {
+                return Response.status(201).entity("A new event has been created").build();
+            }else{
+                return Response.status(404).entity("Creation failed").build();
+            }
+        }else {
+            return Response.status(401).entity("Please log in fist").build();
+        }
     }
 
     /**
@@ -97,7 +105,7 @@ public class EventRestService {
     }
 
     @GET
-    @Path("/completed")
+    @Path("/completeList")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public List<Event> getCompletedList(@Context SecurityContext sc) {
         Long userId = ((User) sc.getUserPrincipal()).getUserId();
@@ -105,11 +113,17 @@ public class EventRestService {
     }
 
     @GET
-    @Path("/uncompleted")
+    @Path("/todoList")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public List<Event> getUnCompletedList(@Context SecurityContext sc) {
+    public Response getUnCompletedList(@Context SecurityContext sc) {
         Long userId = ((User) sc.getUserPrincipal()).getUserId();
-        return eventDao.getUncompletedList(userId);
+        if (userId == null) {
+            return Response.status(401).entity("Please log in fist").build();
+        }else {
+            List<Event> events = eventDao.getUncompletedList(userId);
+            return Response.status(200).entity(events).build();
+        }
+
     }
 
     @GET
