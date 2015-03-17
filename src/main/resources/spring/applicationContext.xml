@@ -50,10 +50,10 @@
         <property name="targetMethod" value="sendEmail" />
     </bean>
 
-    <!-- Run the job every 5 seconds  -->
+    <!-- Run the job every 5 seconds value="0/5 * * * * ? "  -->
     <bean id="trigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="jobDetail" />
-        <property name="cronExpression" value="0/5 * * * * ? " />
+        <property name="cronExpression" value="0 0 12 * * ?" />
     </bean>
 
 

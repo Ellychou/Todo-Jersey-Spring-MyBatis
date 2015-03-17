@@ -81,7 +81,9 @@ public class UserRestService {
         User userGot = getUserByEmail(email);
         if (checkPassword(userGot,password)) {
             String token = tokenService.createToken(userGot);
-            return Response.status(201).entity(token).build();
+            return Response.status(201).entity(token).header("Access-Control-Allow-Origin", "*")
+                    .header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
+                    .allow("OPTIONS").build();
         }else {
             return Response.status(404).entity("User not found").build();
         }
@@ -178,6 +180,12 @@ public class UserRestService {
         user.setPassword(EncryptionKit.md5Encrypt(password + user.getSalt()));
     }
 
+    @GET
+    @Path("testRest")
+    public Response getTest() {
+        String output = "Jersey say : ";
+        return Response.ok(output).header("Access-Control-Allow-Origin", "*").build();
+    }
 
 
 

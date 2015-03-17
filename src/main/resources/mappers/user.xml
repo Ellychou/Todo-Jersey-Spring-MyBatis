@@ -13,7 +13,7 @@
     </resultMap>
 
     <!-- ************** CREATE ************** -->
-    <insert id="createUser" parameterType="User" useGeneratedKeys="true" keyProperty="user.userId" keyColumn="user_id">
+    <insert id="createUser" parameterType="User" useGeneratedKeys="true" keyProperty="userId" keyColumn="user_id">
         INSERT
           INTO user
         SET

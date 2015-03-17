@@ -27,7 +27,7 @@ public class AuthenticationRequestFilter implements ContainerRequestFilter {
         //log.info(requestContext.getHeaders());
 
         String path = requestContext.getUriInfo().getPath();
-        if(path.equals("/user/login") || path.equals("/user/signup")) {
+        if(path.equals("/user/login") || path.equals("/user/testRest")) {
             return;
         }
         String token = requestContext.getHeaderString("Authorization");
