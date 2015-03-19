@@ -81,9 +81,7 @@ public class UserRestService {
         User userGot = getUserByEmail(email);
         if (checkPassword(userGot,password)) {
             String token = tokenService.createToken(userGot);
-            return Response.status(201).entity(token).header("Access-Control-Allow-Origin", "*")
-                    .header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
-                    .allow("OPTIONS").build();
+            return Response.status(200).entity(token).build();
         }else {
             return Response.status(404).entity("User not found").build();
         }
@@ -184,7 +182,7 @@ public class UserRestService {
     @Path("testRest")
     public Response getTest() {
         String output = "Jersey say : ";
-        return Response.ok(output).header("Access-Control-Allow-Origin", "*").build();
+        return Response.ok(output).build();
     }
 
 
