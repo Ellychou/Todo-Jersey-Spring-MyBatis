@@ -6,7 +6,7 @@ import org.eclipse.jetty.server.bio.SocketConnector;
 import org.eclipse.jetty.webapp.WebAppContext;
 
 /**
- * Created by szhou on 2015/2/25.
+ * @author Shan Zhou
  */
 public class Starter {
     private static final Logger log = Logger.getLogger(Starter.class);

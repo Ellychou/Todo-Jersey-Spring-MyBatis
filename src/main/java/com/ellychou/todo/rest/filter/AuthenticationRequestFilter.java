@@ -25,25 +25,27 @@ public class AuthenticationRequestFilter implements ContainerRequestFilter {
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
         //log.info(requestContext.getHeaders());
-
+        if (requestContext.getMethod().equalsIgnoreCase("options")) {
+            requestContext.abortWith(Response.ok().build());
+        }
         String path = requestContext.getUriInfo().getPath();
-        if(path.equals("/user/login") || path.equals("/user/testRest")) {
+        if (path.equals("/user/login") || path.equals("/user/signup")) {
             return;
         }
         String token = requestContext.getHeaderString("Authorization");
-        log.info("token "+ token);
+        log.info("token " + token);
         User user = StringUtils.isEmpty(token) ? null : tokenService.getUserByToken(token);
-        log.info("user"+user);
+        log.info("user" + user);
 
         if (user == null) {
-           // requestContext.abortWith(
-                  //  Response.status(Response.Status.BAD_REQUEST).entity("User must log in first").build()
-          //  );
+            // requestContext.abortWith(
+            //  Response.status(Response.Status.BAD_REQUEST).entity("User must log in first").build()
+            //  );
             requestContext.setSecurityContext(new AuthenticationSecurityContext());
-        }else{
+        } else {
             requestContext.setSecurityContext(new AuthenticationSecurityContext(user));
+            log.info("securitycontext: " + requestContext.getSecurityContext().getUserPrincipal().getName());
         }
-        log.info("securitycontext: " + requestContext.getSecurityContext().getUserPrincipal().getName());
 
     }
 }

@@ -46,11 +46,17 @@ public class UserRestService {
     public Response createUser(User user) {
         String password = user.getPassword();
         resetPassword(user,password);
-        userDao.createUser(user);
+        int i = userDao.createUser(user);
+        if (i == 0) {
+            return Response.status(400).entity("User creation failed").build();
+        }
         log.info("userService create user " + user);
 
         String token = tokenService.createToken(user);
-        return Response.status(201).entity(token).build();
+        if (token == null) {
+            return Response.status(400).entity("Token creation failed").build();
+        }
+        return Response.status(201).entity("{\"token\":\""+token+"\"}").build();
     }
 
     @POST
@@ -62,7 +68,7 @@ public class UserRestService {
         resetPassword(user,password);
         userDao.createUser(user);
         String token = tokenService.createToken(user);
-        return Response.status(201).entity("New user has been created" + token).build();
+        return Response.status(201).entity("New user has been created" + "{\"token\":\""+token+"\"}").build();
     }
 
     @GET
@@ -81,13 +87,13 @@ public class UserRestService {
         User userGot = getUserByEmail(email);
         if (checkPassword(userGot,password)) {
             String token = tokenService.createToken(userGot);
-            return Response.status(200).entity(token).build();
+            return Response.status(200).entity("{\"token\":\""+token+"\"}").build();
         }else {
             return Response.status(404).entity("User not found").build();
         }
     }
 
-    @POST @Path("logout")
+    @POST @Path("/logout")
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     public Response logout(@Context SecurityContext sc) {
