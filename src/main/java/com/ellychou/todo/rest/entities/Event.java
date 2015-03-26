@@ -1,6 +1,9 @@
 package com.ellychou.todo.rest.entities;
 
+import com.ellychou.todo.rest.util.CustomJsonDateDeserializer;
 import com.google.common.base.Objects;
+import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.map.annotate.JsonDeserialize;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
@@ -55,14 +58,12 @@ public class Event implements Serializable {
 
     }
 
-    public Event(Long eventId, String title, String description, Date doneTime, Date startTime, Long userId) {
+    public Event(Long eventId, int isDone, int isNotified) {
         this.eventId = eventId;
-        this.title = title;
-        this.description = description;
-        this.doneTime = doneTime;
-        this.startTime = startTime;
-        this.userId = userId;
+        this.isDone = isDone;
+        this.isNotified = isNotified;
     }
+
 
     public Long getEventId() {
         return eventId;
@@ -80,10 +81,11 @@ public class Event implements Serializable {
         this.description = description;
     }
 
-    public Date getstartTime() {
+    public Date getStartTime() {
         return startTime;
     }
 
+    @JsonDeserialize(using = CustomJsonDateDeserializer.class)
     public void setStartTime(Date startTime) {
         this.startTime = startTime;
     }
@@ -100,6 +102,7 @@ public class Event implements Serializable {
         return doneTime;
     }
 
+    @JsonDeserialize(using = CustomJsonDateDeserializer.class)
     public void setDoneTime(Date doneTime) {
         this.doneTime = doneTime;
     }
@@ -135,28 +138,42 @@ public class Event implements Serializable {
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", doneTime=" + doneTime +
-                ", setTime=" + startTime +
+                ", startTime=" + startTime +
+                ", userId=" + userId +
+                ", isDone=" + isDone +
+                ", isNotified=" + isNotified +
                 '}';
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hashCode(eventId, title, description, doneTime, startTime);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Event event = (Event) o;
+
+        if (isDone != event.isDone) return false;
+        if (isNotified != event.isNotified) return false;
+        if (description != null ? !description.equals(event.description) : event.description != null) return false;
+        if (doneTime != null ? !doneTime.equals(event.doneTime) : event.doneTime != null) return false;
+        if (eventId != null ? !eventId.equals(event.eventId) : event.eventId != null) return false;
+        if (startTime != null ? !startTime.equals(event.startTime) : event.startTime != null) return false;
+        if (title != null ? !title.equals(event.title) : event.title != null) return false;
+        if (userId != null ? !userId.equals(event.userId) : event.userId != null) return false;
+
+        return true;
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null || getClass() != obj.getClass()) {
-            return false;
-        }
-        final Event other = (Event) obj;
-        return Objects.equal(this.eventId, other.eventId)
-                && Objects.equal(this.title, other.title)
-                && Objects.equal(this.description, other.description)
-                && Objects.equal(this.doneTime, other.doneTime)
-                && Objects.equal(this.startTime, other.startTime);
+    public int hashCode() {
+        int result = eventId != null ? eventId.hashCode() : 0;
+        result = 31 * result + (title != null ? title.hashCode() : 0);
+        result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + (doneTime != null ? doneTime.hashCode() : 0);
+        result = 31 * result + (startTime != null ? startTime.hashCode() : 0);
+        result = 31 * result + (userId != null ? userId.hashCode() : 0);
+        result = 31 * result + isDone;
+        result = 31 * result + isNotified;
+        return result;
     }
 }

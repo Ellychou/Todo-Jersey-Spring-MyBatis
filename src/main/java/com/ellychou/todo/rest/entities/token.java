@@ -1,5 +1,7 @@
 package com.ellychou.todo.rest.entities;
 
+import org.codehaus.jackson.annotate.JsonProperty;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -8,8 +10,9 @@ import java.util.Date;
  */
 public class Token implements Serializable {
     public static final long serialVersionUID = -8039686696076337046L;
-
+    @JsonProperty("userId")
     private Long userId;
+    @JsonProperty("token")
     private String token;
     private Date timeStamp;
     private long expire;

@@ -41,6 +41,13 @@
           event_id = #{value}
     </select>
 
+    <select id="getUserIdByEventId" resultType="Long" parameterType="Long">
+        SELECT user_id
+        FROM event
+        WHERE event_id = #{value}
+    </select>
+
+
     <select id="getCompleteList" resultMap="eventMap" parameterType="Long">
         SELECT * FROM event
         WHERE user_id = #{userId}
@@ -69,33 +76,32 @@
 
 
     <!-- ************** UPDATE ************** -->
-    <update id="updateEvent" parameterType="map">
+    <update id="updateEvent" parameterType="Long">
         UPDATE
           event
         SET
-            <if test="event_id != null"> event_id = #{eventId},</if>
             <if test="title != null"> title = #{title},</if>
             <if test="description != null">description = #{description},</if>
-            <if test="done_time != null">done_time = #{doneTime},</if>
-            <if test="start_time != null">start_time = UTC_TIMESTAMP()</if>
-            <if test="is_done != null"> is_done= #{isDone} </if>
-            <if test="is_notify != null">is_notify = #{is_notify}</if>
+            <if test="doneTime != null">done_time = #{doneTime},</if>
+            <if test="startTime != null">start_time = UTC_TIMESTAMP(),</if>
+            <if test="isDone != null"> is_done= #{isDone},</if>
+            <if test="isNotified != null">is_notify = #{isNotified}</if>
         WHERE
             event_id = #{eventId}
-        AND user_id = #{userId}
+
     </update>
 
-    <update id="updateEventIsDone" parameterType="map">
+    <update id="updateEventIsDone" parameterType="Long">
         UPDATE event
         SET is_done = 1
         WHERE event_id = #{eventId}
-        AND user_id = #{userId}
+
     </update>
 
     <update id="updateEventIsNotified" parameterType="Long">
         UPDATE event
         SET is_notify = 1
-        WHERE event_id = #{eventId}
+        WHERE event_id = #{event.eventId}
 
     </update>
 

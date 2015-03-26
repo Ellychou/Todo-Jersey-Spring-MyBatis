@@ -42,7 +42,7 @@ public class EventDaoTest {
     @Test
     public void updateTest(){
         Event event = new Event(1L,"test", "finish now", new Date());
-        int i = eventDao.updateEvent(event,1L);
+        int i = eventDao.updateEvent(event);
         log.info(i);
     }
 

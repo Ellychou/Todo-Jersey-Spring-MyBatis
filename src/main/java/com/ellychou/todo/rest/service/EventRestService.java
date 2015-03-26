@@ -3,6 +3,7 @@ package com.ellychou.todo.rest.service;
 import com.ellychou.todo.rest.dao.EventDao;
 import com.ellychou.todo.rest.entities.Event;
 import com.ellychou.todo.rest.entities.User;
+import com.ellychou.todo.rest.util.MsgUtils;
 import org.apache.log4j.Logger;
 import org.jboss.logging.FormatWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,7 @@ public class EventRestService {
      */
     @POST @Path("/createNewEvent")
     @Consumes({MediaType.APPLICATION_JSON})
-    @Produces({MediaType.TEXT_HTML})
+    @Produces({MediaType.APPLICATION_JSON})
     @Transactional
     public Response createEvent(@Context SecurityContext sc,Event event) {
         //Long userId = ((User) sc.getUserPrincipal()).getUserId();
@@ -51,12 +52,12 @@ public class EventRestService {
             event.setUserId(userId);
             int i = eventDao.createEvent(event);
             if(i == 1) {
-                return Response.status(201).entity("A new event has been created").build();
+                return Response.status(200).entity(MsgUtils.msg("A new event has been created")).build();
             }else{
-                return Response.status(404).entity("Creation failed").build();
+                return Response.status(404).entity(MsgUtils.msg("Creation failed")).build();
             }
         }else {
-            return Response.status(401).entity("Please log in fist").build();
+            return Response.status(401).entity(MsgUtils.msg("Please log in fist")).build();
         }
     }
 
@@ -118,7 +119,7 @@ public class EventRestService {
     public Response getUnCompletedList(@Context SecurityContext sc) {
         Long userId = ((User) sc.getUserPrincipal()).getUserId();
         if (userId == null) {
-            return Response.status(401).entity("Please log in fist").build();
+            return Response.status(401).entity(MsgUtils.msg("Please log in fist")).build();
         }else {
             List<Event> events = eventDao.getUncompletedList(userId);
             return Response.status(200).entity(events).build();
@@ -139,16 +140,24 @@ public class EventRestService {
      * ********************************* UPDATE ***********************************
      */
 
-    @PUT
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @PUT @Path("updateEvent")
+    @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.TEXT_HTML})
     @Transactional
     public Response updateEventById(@Context SecurityContext sc,Event event) throws WebApplicationException {
-        Long userId = ((User) sc.getUserPrincipal()).getUserId();
-        if (event.getEventId() == null) {
+        Long userId = Long.valueOf(sc.getUserPrincipal().getName());
+        if (userId == null) {
+            return Response.status(404).entity(MsgUtils.msg("Please log in first")).build();
+        }
+        log.info("userId in updateEvent : " + userId);
+        Long eventId = event.getEventId();
+        if (eventId == null) {
             throw new WebApplicationException("id not found");
         }
-        int updated = eventDao.updateEvent(event, userId);
+        if (!userId.equals(eventDao.getUserIdByEventId(eventId)) ) {
+            return Response.status(404).entity(MsgUtils.msg("This user does not has this event")).build();
+        }
+        int updated = eventDao.updateEvent(event);
         String message;
         int status;
         if (updated == 1) {
@@ -158,38 +167,110 @@ public class EventRestService {
             status = 404; //Not Acceptable
             message = "This event can not be updated";
         }
-        return Response.status(status).entity(message).build();
+        return Response.status(status).entity(MsgUtils.msg(message)).build();
     }
+
+    @POST @Path("/setDone")
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON})
+    @Transactional
+    public Response setEventIsDone (@Context SecurityContext sc,Event event) {
+        Long eventId = event.getEventId();
+        if (eventId == null) {
+            throw new WebApplicationException("id not found");
+        }
+        Long userId = ((User) sc.getUserPrincipal()).getUserId();
+        log.info(userId + "eventId : " + eventId);
+
+        String message;
+        int status;
+        if (!userId.equals(eventDao.getUserIdByEventId(eventId)) ) {
+
+            message = "This user does not has this event";
+            return Response.status(404).entity(MsgUtils.msg(message)).build();
+        }
+        event.setIsDone(1);
+        int updated = eventDao.updateEvent(event);
+        if (updated == 1) {
+            status = 200;
+            message = "Updated Event Successfully";
+        } else {
+            status = 404; //Not Acceptable
+            message = "This event can not be updated";
+        }
+        return Response.status(status).entity(MsgUtils.msg(message)).build();
+    }
+
+    @POST @Path("/setUndone")
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON})
+    @Transactional
+    public Response setUnDone (@Context SecurityContext sc,Event event) {
+        Long eventId = event.getEventId();
+        if (eventId == null) {
+            throw new WebApplicationException("id not found");
+        }
+        Long userId = ((User) sc.getUserPrincipal()).getUserId();
+        log.info(userId + "eventId : " + eventId);
+
+        String message;
+        int status;
+        if (!userId.equals(eventDao.getUserIdByEventId(eventId)) ) {
+            message = "This user does not has this event";
+            return Response.status(404).entity(MsgUtils.msg(message)).build();
+        }
+        event.setIsDone(0);
+        int updated = eventDao.updateEvent(event);
+        if (updated == 1) {
+            status = 200;
+            message = "Updated Event Successfully";
+        } else {
+            status = 404; //Not Acceptable
+            message = "This event can not be updated";
+        }
+        return Response.status(status).entity(MsgUtils.msg(message)).build();
+    }
+
 
     /**
      * ********************************* DELETE ***********************************
      */
 
     @DELETE
-    @Path("{id}")
-    @Produces({MediaType.TEXT_HTML})
+    @Path("deleteTask")
+    @Produces({MediaType.APPLICATION_JSON})
     @Transactional
-    public Response deleteEventById(@Context SecurityContext sc,@PathParam("id") Long id) {
+    public Response deleteEventById(@Context SecurityContext sc,Event event) {
+
+        Long eventId = event.getEventId();
+        if (eventId == null) {
+            throw new WebApplicationException("id not found");
+        }
         Long userId = ((User) sc.getUserPrincipal()).getUserId();
-        int deleted = eventDao.deleteEvent(id, userId);
+        log.info(userId + "eventId : " + eventId);
+
+        if (!userId.equals(eventDao.getUserIdByEventId(eventId)) ) {
+            return Response.status(404).entity(MsgUtils.msg("This user does not has this event")).build();
+        }
+        int deleted = eventDao.deleteEvent(eventId, userId);
         if (deleted == 1) {
-            return Response.status(204).entity("Event with the id" + id + "has been deleted").build();
+            return Response.status(204).entity(MsgUtils.msg("Event has been deleted")).build();
         } else {
-            return Response.status(404).entity("Event can not be deleted").build();
+            return Response.status(404).entity(MsgUtils.msg("Event can not be deleted")).build();
         }
     }
 
     @DELETE
     @Produces({MediaType.TEXT_HTML})
     @Transactional
-    public Response deleteEvent(@Context SecurityContext sc) {
+    public Response deleteEvents(@Context SecurityContext sc) {
         Long userId = ((User) sc.getUserPrincipal()).getUserId();
         int deleted = eventDao.deleteEvents(userId);
 
         if (deleted == 1) {
-            return Response.status(204).entity("All the events have been deleted").build();
+            return Response.status(204).entity(MsgUtils.msg("All the events have been deleted")).build();
         } else {
-            return Response.status(404).entity("Event can not be deleted").build();
+            return Response.status(404).entity(MsgUtils.msg("Event can not be deleted")).build();
         }
     }
 }

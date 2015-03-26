@@ -2,6 +2,7 @@ package com.ellychou.todo.rest.dao;
 
 import com.ellychou.todo.rest.entities.Event;
 import org.apache.ibatis.annotations.Param;
+import org.omg.CORBA.PUBLIC_MEMBER;
 
 import java.util.List;
 
@@ -21,16 +22,18 @@ public interface EventDao {
 
     public List<Event> getNotifiedList(Long userId);
 
+    public Long getUserIdByEventId(Long eventId);
+
 
 
     public int createEvent(Event event);
 
 
-    public int updateEventIsDone(@Param("eventId") Long eventId, @Param("userId") Long userId);
+    public int updateEventIsDone(Long eventId);
 
     public int updateEventIsNotified(Long eventId);
 
-    public int updateEvent(@Param("event") Event event, @Param("userId") Long userId);
+    public int updateEvent(Event event);
 
     public int deleteEvent(@Param("eventId") Long eventId, @Param("userId") Long userId);
 
