@@ -29,7 +29,7 @@ public class AuthenticationRequestFilter implements ContainerRequestFilter {
             requestContext.abortWith(Response.ok().build());
         }
         String path = requestContext.getUriInfo().getPath();
-        if (path.equals("/user/login") || path.equals("/user/signup")) {
+        if (path.equals("/user/login") || path.equals("/user/signup") || path.equals("/user/testRest")) {
             return;
         }
         String token = requestContext.getHeaderString("Authorization");

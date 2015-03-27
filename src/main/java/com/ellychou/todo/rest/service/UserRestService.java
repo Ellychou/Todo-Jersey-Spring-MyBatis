@@ -187,7 +187,7 @@ public class UserRestService {
     @GET
     @Path("testRest")
     public Response getTest() {
-        String output = "Jersey say : ";
+        String output = "Hollow world!";
         return Response.ok(output).build();
     }
 
