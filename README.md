@@ -19,9 +19,9 @@ Besides, I use token for authentication
 
 
 ##2. How to use API
-**HTTP methods**: GET,POST,PUT and DELETE.
-**Data**: Consumes and produces data in json format.
-**url**: for user: `$BASE_URL/user`, for events: `$BASE_URL/event`
+**HTTP methods**: GET,POST,PUT and DELETE.<br/>
+**Data**: Consumes and produces data in json format.<br/>
+**url**: for user: `$BASE_URL/user`, for events: `$BASE_URL/event`<br/>
 
 ### For example:
 ##### Sign Up
