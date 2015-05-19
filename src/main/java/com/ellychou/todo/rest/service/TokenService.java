@@ -11,7 +11,11 @@ import org.springframework.stereotype.Component;
 import java.util.UUID;
 
 /**
- * Created by szhou on 2015/3/6.
+ * Service class that handles REST request about token, which is for user authentication check
+ * @author szhou
+ * @version 1.0.1
+ * @since 2015/3/6
+ *
  */
 @Component
 public class TokenService {
@@ -22,9 +26,14 @@ public class TokenService {
     @Autowired
     public UserDao userDao;
 
+    /**
+     * Create token by userId
+     * @param user
+     * @return token
+     *
+     */
     public String createToken(User user) {
         Long userId = user.getUserId();
-        log.info("use when create token : " + user);
         Token token = new Token();
         token.setUserId(userId);
         token.setToken(UUID.randomUUID().toString());
@@ -34,20 +43,26 @@ public class TokenService {
         }
         return token.getToken();
     }
-
+    /**
+     * Find user by token
+     * @param token
+     * @return token
+     */
     public User getUserByToken(String token) {
         Long userId = tokenDao.getUserIdByToken(token);
         log.info("get userId by token" + userId);
         return userDao.getUserById(userId);
     }
 
+
+    /**
+     * Find token by userId
+     * @param userId
+     * @return token
+     */
     public String getTokenById(Long userId) {
         return tokenDao.getTokenByUserId(userId).getToken();
     }
-
-
-
-
 
 
 }

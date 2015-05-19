@@ -6,7 +6,4 @@ package com.ellychou.todo.rest.util;
 public interface Const {
     String MAILGUN_USERNAME = "todo@mg.ellychou.com";
     String MAILGUN_PASSWORD = "zhoushanshan321";
-
-
-
 }

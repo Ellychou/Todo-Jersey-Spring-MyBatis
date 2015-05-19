@@ -10,7 +10,12 @@ import javax.ws.rs.core.SecurityContext;
 import java.security.Principal;
 
 /**
- * Created by szhou on 2015/3/9.
+ * AuthenticationSecurityContext SecurityContext with the user data
+ * if the pass the AuthenticationRequestFilter
+ * @author szhou
+ * @version 1.0.1
+ * @since 2015/3/9
+ *
  */
 public class AuthenticationSecurityContext implements SecurityContext {
 
@@ -28,6 +33,10 @@ public class AuthenticationSecurityContext implements SecurityContext {
         this.user = user;
     }
 
+    /**
+     * User entity implements Principal
+     * @return user
+     */
     @Override
     public Principal getUserPrincipal() {
         log.info("princeple: " + user);

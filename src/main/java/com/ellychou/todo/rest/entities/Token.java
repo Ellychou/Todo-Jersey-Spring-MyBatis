@@ -6,15 +6,23 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * Created by szhou on 2015/3/5.
+ * Token entity
+ * @author szhou
+ * @version 1.0.1
+ * @since 2015/3/15
  */
 public class Token implements Serializable {
     public static final long serialVersionUID = -8039686696076337046L;
+
+    /** id of the user*/
     @JsonProperty("userId")
     private Long userId;
+    /** user token  */
     @JsonProperty("token")
     private String token;
+    /** the datetime when the token is created */
     private Date timeStamp;
+    /** when the token will be expire*/
     private long expire;
 
     public Long getUserId() {

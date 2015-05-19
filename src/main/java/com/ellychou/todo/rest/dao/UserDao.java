@@ -6,7 +6,11 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 /**
- * Created by szhou on 2015/2/27.
+ * User interface mapped to user.xml to manipulate database
+ * @author szhou
+ * @version 1.0.1
+ * @since 2015/2/27
+ *
  */
 public interface UserDao {
     public int createUser(User user);

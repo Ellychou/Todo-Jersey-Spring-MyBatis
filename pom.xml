@@ -9,7 +9,8 @@
 	<description>Example of building REST web services with spring, jersey and mybatis on a tomcat server</description>
 
 	<properties>
-		<spring.version>4.1.5.RELEASE</spring.version>
+		<spring.version>
+			4.1.5.RELEASE</spring.version>
 		<logback.version>1.1.1</logback.version>
         <jetty.version>7.6.3.v20120416</jetty.version>
  		<jcloverslf4j.version>1.7.6</jcloverslf4j.version>		

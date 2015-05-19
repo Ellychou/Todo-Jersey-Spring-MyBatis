@@ -10,8 +10,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class LoggingResponseFilter
-		implements ContainerResponseFilter {
+public class LoggingResponseFilter implements ContainerResponseFilter {
 
 	private static final Logger logger = LoggerFactory.getLogger(LoggingResponseFilter.class);
 

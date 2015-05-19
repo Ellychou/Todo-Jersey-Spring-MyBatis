@@ -10,27 +10,31 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * Created by szhou on 2015/2/10.
+ * Event entity
+ * @author szhou
+ * @version 1.0.1
+ * @since 2015/2/10
  */
 
 @XmlRootElement
 public class Event implements Serializable {
     private static final long serialVersionUID = -8039686696076337057L;
 
+    /** id of the event */
     private Long eventId;
-
+    /** title of the event */
     private String title;
-
+    /** shot description of the event */
     private String description;
-
+    /** the datetime that the event has to be done */
     private Date doneTime;
-
+    /** the datetime that the event will be started */
     private Date startTime;
-
+    /** the id for user */
     private Long userId;
-
+    /** if done, is 1; if not done,is 0 */
     private int isDone;
-
+    /** if already sent the email to notify user, is 1, else, is 0 */
     private int isNotified;
 
     public Event(){}
@@ -47,15 +51,12 @@ public class Event implements Serializable {
         this.description = description;
         this.doneTime = doneTime;
         this.userId = userId;
-
     }
 
     public Event(String title, String description, Date doneTime) {
         this.title = title;
         this.description = description;
         this.doneTime = doneTime;
-
-
     }
 
     public Event(Long eventId, int isDone, int isNotified) {

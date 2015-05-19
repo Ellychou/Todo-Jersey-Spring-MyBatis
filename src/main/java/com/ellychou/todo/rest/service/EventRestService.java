@@ -21,7 +21,11 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Created by szhou on 2015/2/10.
+ * Service class that handles REST request about event
+ * @author szhou
+ * @version 1.0.1
+ * @since 2015/3/1
+ *
  */
 @Component
 @Path("/event")
@@ -31,21 +35,18 @@ public class EventRestService {
     @Autowired
     public EventDao eventDao;
 
-
-
     /************************************ CREATE ************************************/
     /**
      * Create new event
-     *
      * @param event
-     * @return
+     * @return Response with status code and message in json format
      */
     @POST @Path("/createNewEvent")
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
     @Transactional
     public Response createEvent(@Context SecurityContext sc,Event event) {
-        //Long userId = ((User) sc.getUserPrincipal()).getUserId();
+       //Get user id from the SecurityContext if this request pass the AuthenticationResquestFilter
         Long userId = Long.valueOf(sc.getUserPrincipal().getName());
         if (userId != null) {
             log.info("userid" + userId);
@@ -62,7 +63,8 @@ public class EventRestService {
     }
 
     /**
-     *
+     *Create Event from form input
+     * @return Response with status code and message in json format
      */
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -77,10 +79,12 @@ public class EventRestService {
         return Response.status(201).entity("A new event has been created").build();
     }
 
-    /**
-     * ********************************* READ ***********************************
-     */
 
+     /********************************** READ ***********************************/
+
+    /**
+     * @return Event list, all the events for the user
+     */
     @GET
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public List<Event> getEventList(@Context SecurityContext sc) {
@@ -88,7 +92,10 @@ public class EventRestService {
         return eventDao.getEventListByUserId(userId);
     }
 
-
+    /**
+     * @param id event id
+     * @return Response with event entity if the event is found by userId and eventId
+     */
     @GET
     @Path("one/{eventId}")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
@@ -105,6 +112,10 @@ public class EventRestService {
         }
     }
 
+
+    /**
+     * @return Completed Event list, all the events that have been completed for the user
+     */
     @GET
     @Path("/completeList")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
@@ -113,6 +124,9 @@ public class EventRestService {
         return eventDao.getCompleteList(userId);
     }
 
+    /**
+     * @return Uncompleted Event list, all the events that have not been completed for the user
+     */
     @GET
     @Path("/todoList")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
@@ -124,9 +138,11 @@ public class EventRestService {
             List<Event> events = eventDao.getUncompletedList(userId);
             return Response.status(200).entity(events).build();
         }
-
     }
 
+    /**
+     * @return Event list, all the events that have been notified for the user
+     */
     @GET
     @Path("/notified")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
@@ -140,6 +156,11 @@ public class EventRestService {
      * ********************************* UPDATE ***********************************
      */
 
+    /**
+     * Update the event which has the same event id with the parameter event
+     * @param event
+     * @return Response with the status code and message in json format
+     */
     @PUT @Path("updateEvent")
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.TEXT_HTML})
@@ -170,6 +191,11 @@ public class EventRestService {
         return Response.status(status).entity(MsgUtils.msg(message)).build();
     }
 
+    /**
+     * Update the isDone field to 1
+     * @param event
+     * @return Response with the status code and message in json format
+     */
     @POST @Path("/setDone")
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
@@ -185,7 +211,6 @@ public class EventRestService {
         String message;
         int status;
         if (!userId.equals(eventDao.getUserIdByEventId(eventId)) ) {
-
             message = "This user does not has this event";
             return Response.status(404).entity(MsgUtils.msg(message)).build();
         }
@@ -201,6 +226,11 @@ public class EventRestService {
         return Response.status(status).entity(MsgUtils.msg(message)).build();
     }
 
+    /**
+     * Update the isDone field to 0
+     * @param event
+     * @return Response with the status code and message in json format
+     */
     @POST @Path("/setUndone")
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
@@ -232,10 +262,15 @@ public class EventRestService {
     }
 
 
-    /**
-     * ********************************* DELETE ***********************************
-     */
 
+     /********************************* DELETE ***********************************/
+
+
+    /**
+     * Delete the event by event id
+     * @param event
+     * @return Response with the status code and message in json format
+     */
     @DELETE
     @Path("deleteTask")
     @Produces({MediaType.APPLICATION_JSON})
@@ -259,7 +294,10 @@ public class EventRestService {
             return Response.status(404).entity(MsgUtils.msg("Event can not be deleted")).build();
         }
     }
-
+    /**
+     * Delete all the events for one user
+     * @return Response with the status code and message in json format
+     */
     @DELETE
     @Produces({MediaType.TEXT_HTML})
     @Transactional

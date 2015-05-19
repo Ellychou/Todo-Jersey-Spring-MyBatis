@@ -19,7 +19,11 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Created by szhou on 2015/3/2.
+ * Service class that handles REST request about token, which is for user authentication check
+ * @author szhou
+ * @version 1.0.1
+ * @since 2015/3/2
+ *
  */
 @Component
 @Path("/user")
@@ -34,10 +38,12 @@ public class UserRestService {
 
     @Autowired
     public TokenService tokenService;
+
+    /************************************ CREATE ************************************/
     /*
-    * Create new event
-    * @param event
-    * @return
+    * Create new user account and a token for this user
+    * @param user
+    * @return Response with status code and message in json format
     */
     @POST @Path("/signup")
     @Consumes({MediaType.APPLICATION_JSON})
@@ -50,8 +56,6 @@ public class UserRestService {
         if (i == 0) {
             return Response.status(400).entity("User creation failed").build();
         }
-        log.info("userService create user " + user);
-
         String token = tokenService.createToken(user);
         if (token == null) {
             return Response.status(400).entity("Token creation failed").build();
@@ -59,6 +63,11 @@ public class UserRestService {
         return Response.status(201).entity("{\"token\":\""+token+"\"}").build();
     }
 
+    /*
+    * Create new user account by form
+    * @param user
+    * @return Response with status code and message in json format
+    */
     @POST
     @Consumes({MediaType.APPLICATION_FORM_URLENCODED})
     @Produces({MediaType.TEXT_HTML})
@@ -70,13 +79,21 @@ public class UserRestService {
         String token = tokenService.createToken(user);
         return Response.status(201).entity("New user has been created" + "{\"token\":\""+token+"\"}").build();
     }
+    /********************************** READ ***********************************/
 
+    /**
+     * @return User list
+     */
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     public List<User> getUserList(){
         return userDao.getUsers();
     }
 
+    /**
+     * Log in, check the user by email and password, if there is a user with this password and email, create a token
+     * @return Response with status code and message in json format
+     */
     @POST @Path("/login")
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
@@ -93,8 +110,11 @@ public class UserRestService {
         }
     }
 
+    /**
+     * Log out, delete the token
+     * @return Response with status code and message in json format
+     */
     @POST @Path("/logout")
-    @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     public Response logout(@Context SecurityContext sc) {
         Long userId = Long.valueOf(sc.getUserPrincipal().getName());
@@ -104,12 +124,12 @@ public class UserRestService {
         }else{
             return Response.status(404).entity("This user can not be deleted").build();
         }
-
-
     }
 
-
-
+    /**
+     * Get user by user id
+     * @return Response with status code and message or user entity in json format
+     */
     @GET @Path("{id}")
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     public Response getUserById(@PathParam("id") Long id) {
@@ -121,9 +141,16 @@ public class UserRestService {
         }
     }
 
+     /********************************* UPDATE ***********************************/
+
+    /**
+     * Update user by user id
+     * @param user, updated user
+     * @return Response with status code and message in json format
+     */
     @PUT @Path("id")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    @Produces({MediaType.TEXT_HTML})
+    @Produces({MediaType.APPLICATION_JSON})
     @Transactional
     public Response updateUserById(@PathParam("id") Long id, User user) {
         if(user.getUserId() == null) {
@@ -136,10 +163,14 @@ public class UserRestService {
             return Response.status(404).entity("This user can not be updated").build();
         }
     }
-
+    /**
+     * Update user password
+     * @param user , with new password
+     * @return Response with status code and message or user entity in json format
+     */
     @PUT @Path("updatePassword")
     @Consumes({MediaType.APPLICATION_JSON})
-    @Produces({MediaType.TEXT_HTML})
+    @Produces({MediaType.APPLICATION_JSON})
     @Transactional
     public Response updatePassword(User user) {
         String email = user.getEmail();
@@ -151,12 +182,17 @@ public class UserRestService {
         }else{
             return Response.status(404).entity("This user can not be updated").build();
         }
-
-
     }
 
+
+    /**
+     * Delete user by id
+     * @param id , user id
+     * @return Response with status code and message or user entity in json format
+     */
     @DELETE @Path("id")
-    @Produces({MediaType.TEXT_HTML})
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON})
     @Transactional
     public Response deleteUserByid(@PathParam("id") Long id) {
         int deleted = userDao.deleteUserById(id);
@@ -167,11 +203,21 @@ public class UserRestService {
         }
     }
 
+    /**
+     * Find user by email
+     * @param email
+     * @return user
+     */
     public User getUserByEmail(String email){
         User user = userDao.getUserByNameOrEmail("email",email);
         return user;
     }
 
+    /**
+     * Encrypt the giving password, check it whether equals to the password stored in the database
+     * @param password
+     * @return user
+     */
     public boolean checkPassword(User user, String password) {
         String salt = user.getSalt();
         String psw = EncryptionKit.md5Encrypt(password+salt);
@@ -179,23 +225,23 @@ public class UserRestService {
 
     }
 
+    /**
+     * Reset the salt and the password
+     * @param password
+     */
     public void resetPassword (User user, String password) {
         user.setSalt(EncryptionKit.md5Encrypt(UUID.randomUUID().toString()));
         user.setPassword(EncryptionKit.md5Encrypt(password + user.getSalt()));
     }
 
+    /**
+     * For test purpose without filter by AuthenticationResponseFilter
+     */
     @GET
     @Path("testRest")
     public Response getTest() {
         String output = "Hollow world!";
         return Response.ok(output).build();
     }
-
-
-
-
-
-
-
 
 }

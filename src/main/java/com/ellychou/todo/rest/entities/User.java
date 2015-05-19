@@ -8,18 +8,29 @@ import java.security.Principal;
 import java.util.Date;
 
 /**
- * Created by szhou on 2015/2/27.
+ * Event entity
+ * @author szhou
+ * @version 1.0.1
+ * @since 2015/2/27
  */
+
 public class User implements Serializable, Principal {
     public static final long serialVersionUID = -8039686696076337056L;
     private static final Logger log = Logger.getLogger(User.class);
 
+    /** id of the user*/
     private Long userId;
+    /** email of the user*/
     private String email;
+    /** user name*/
     private String userName;
+    /** user login password*/
     private String password;
+    /** the time when the user account has been creadted*/
     private Date createdTime;
+    /** last login*/
     private Date loginTime;
+    /** salt for token*/
     private String salt;
 
     public User(String email, String userName, String password) {

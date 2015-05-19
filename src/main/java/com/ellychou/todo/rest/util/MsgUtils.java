@@ -8,7 +8,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author hzhou [hao.zhou@ovitas.com] Since 2015-03-12
+ * @author szhou
+ * @version 1.0.1
+ * @since 2015/3/3
  */
 public class MsgUtils {
 

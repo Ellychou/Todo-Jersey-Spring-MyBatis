@@ -9,7 +9,10 @@ import java.io.UnsupportedEncodingException;
 import java.util.Properties;
 
 /**
- * Created by szhou on 2015/3/10.
+ * Send email
+ * @author szhou
+ * @version 1.0.1
+ * @since 2015/3/3
  */
 public class SendMailKit {
 
